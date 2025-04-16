@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="bg-[#0b0b0c] text-white min-h-screen font-sans">
-      <Head>
+            <Head>
         <title>BitFtx – Predict Crypto. Earn $BFTX</title>
         <meta name="description" content="BitFtx is a decentralized prediction market where you can forecast crypto, finance, and global events — and earn $BFTX for being right." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,7 +29,7 @@ export default function Home() {
       </Head>
 
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+      <header className="fixed top-0 left-0 w-full z-50 bg-[#0b0b0c]/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Image src="/logo.png" alt="BitFtx Logo" width={36} height={36} />
           <h1 className="text-xl font-bold tracking-wide">BitFtx</h1>
@@ -42,8 +42,9 @@ export default function Home() {
         </nav>
       </header>
 
-<main
-  className="relative bg-cover bg-center pt-32" // <-- add padding-top to push it below header
+      {/* Hero Section */}
+      <main
+        className="relative bg-cover bg-center pt-48" // increased pt to account for fixed header
   style={{ backgroundImage: "url('/hero-bg.png')" }}
 >
   {/* Dark overlay */}
