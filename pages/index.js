@@ -13,11 +13,13 @@ const supabase = createClient(
 
 export default function Home() {
   const [formData, setFormData] = useState({
-    wallet: "",
+    name: "",
     email: "",
+    wallet: "",
     twitter: "",
     telegram: "",
   });
+  
   const [message, setMessage] = useState(null);
   
   const handleChange = (e) => {
@@ -28,8 +30,9 @@ export default function Home() {
     e.preventDefault();
     const { error } = await supabase.from("airdrop_leads").insert([
       {
-        wallet_address: formData.wallet,
+        name: formData.name,
         email: formData.email,
+        wallet: formData.wallet,
         twitter: formData.twitter,
         telegram: formData.telegram,
       },
@@ -263,6 +266,15 @@ export default function Home() {
       onSubmit={handleSubmit}
       className="grid grid-cols-1 gap-4 text-left"
     >
+      <input
+  type="text"
+  name="name"
+  value={formData.name}
+  onChange={handleChange}
+  placeholder="Full Name"
+  className="p-3 rounded bg-[#1a1a1d] border border-white/10"
+  required
+/>
       <input
         type="text"
         name="wallet"
