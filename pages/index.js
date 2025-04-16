@@ -44,11 +44,11 @@ export default function Home() {
 
       {/* Hero Section */}
       <main
-        className="relative bg-cover bg-center pt-48" // increased pt to account for fixed header
+  className="relative bg-cover bg-center min-h-[90vh] pt-48 overflow-hidden"
   style={{ backgroundImage: "url('/hero-bg.png')" }}
 >
   {/* Dark overlay */}
-  <div className="absolute inset-0 bg-black/70 z-0" />
+  <div className="absolute inset-0 bg-black/80 z-0" />
 
   {/* Content */}
   <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-24">
@@ -64,10 +64,10 @@ export default function Home() {
         height={100}
         className="mx-auto mb-6 drop-shadow-lg animate-pulse"
       />
-      <h2 className="text-4xl sm:text-5xl font-bold leading-tight mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text animate-fadeInUp">
+      <h2 className="text-4xl sm:text-5xl font-bold leading-tight mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
         Predict Crypto.<br />Earn $BFTX.
       </h2>
-      <p className="text-lg text-white/80 max-w-xl mx-auto animate-fadeInUp delay-200">
+      <p className="text-lg text-white/80 max-w-xl mx-auto">
         A decentralized prediction exchange for degens, dreamers, and true believers.
       </p>
     </motion.div>
