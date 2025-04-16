@@ -2,8 +2,45 @@
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  "https://onevirzsdrfxposewozx.supabase.co", // your actual URL
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk" // your actual anon key
+);
+
 
 export default function Home() {
+  const [formData, setFormData] = useState({
+    wallet: "",
+    email: "",
+    twitter: "",
+    telegram: "",
+  });
+  const [message, setMessage] = useState(null);
+  
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { error } = await supabase.from("airdrop_leads").insert([
+      {
+        wallet_address: formData.wallet,
+        email: formData.email,
+        twitter: formData.twitter,
+        telegram: formData.telegram,
+      },
+    ]);
+    if (error) {
+      setMessage("❌ Error saving your submission.");
+    } else {
+      setMessage("✅ You're in! Thanks for joining the airdrop.");
+      setFormData({ wallet: "", email: "", twitter: "", telegram: "" });
+    }
+  };  
   return (
     <div className="bg-[#0b0b0c] text-white min-h-screen font-sans">
             <Head>
@@ -214,6 +251,65 @@ export default function Home() {
     </div>
   </div>
 </section>
+
+{/* Airdrop Section */}
+<section id="airdrop" className="py-20 px-6 bg-[#111114] text-white text-center">
+  <div className="max-w-2xl mx-auto">
+    <h2 className="text-3xl sm:text-4xl font-bold mb-6">🎁 Join the $BFTX Airdrop</h2>
+    <p className="text-white/80 mb-8">
+      Fill in the details below to qualify for the upcoming airdrop.
+    </p>
+    <form
+      onSubmit={handleSubmit}
+      className="grid grid-cols-1 gap-4 text-left"
+    >
+      <input
+        type="text"
+        name="wallet"
+        value={formData.wallet}
+        onChange={handleChange}
+        placeholder="Wallet Address"
+        className="p-3 rounded bg-[#1a1a1d] border border-white/10"
+        required
+      />
+      <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        placeholder="Email"
+        className="p-3 rounded bg-[#1a1a1d] border border-white/10"
+        required
+      />
+      <input
+        type="text"
+        name="twitter"
+        value={formData.twitter}
+        onChange={handleChange}
+        placeholder="Twitter Handle"
+        className="p-3 rounded bg-[#1a1a1d] border border-white/10"
+        required
+      />
+      <input
+        type="text"
+        name="telegram"
+        value={formData.telegram}
+        onChange={handleChange}
+        placeholder="Telegram Username"
+        className="p-3 rounded bg-[#1a1a1d] border border-white/10"
+        required
+      />
+      <button
+        type="submit"
+        className="bg-purple-600 hover:bg-purple-700 transition p-3 rounded font-bold"
+      >
+        Submit
+      </button>
+    </form>
+    {message && <p className="mt-4 text-sm text-white/70">{message}</p>}
+  </div>
+</section>
+
 
 {/* FAQ Section */}
 <section id="faq" className="py-20 px-6 bg-[#111114] text-white text-center">
