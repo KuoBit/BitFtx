@@ -1,29 +1,37 @@
 // pages/data-policy.js
+import Head from "next/head";
+
 export default function DataPolicy() {
-    return (
-      <div className="max-w-4xl mx-auto px-6 py-20 text-white">
+  return (
+    <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
+      <Head>
+        <title>Data Policy – BitFtx</title>
+      </Head>
+      <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">Data Policy</h1>
-        <p className="mb-4">
-          This Data Policy explains how Kuobit Labs Pvt Ltd collects, uses, and protects your information through BitFtx.com.
+        <p className="text-white/80 mb-4">
+          BitFtx, operated by Kuobit Labs Pvt Ltd, maintains strict policies for collecting, storing, and using data in a transparent and secure manner.
         </p>
-        <h2 className="text-xl font-semibold mt-6 mb-2">1. Collection and Storage</h2>
-        <p className="mb-4">
-          We securely store user-submitted data, including wallet addresses and social handles, using our database providers (e.g., Supabase).
+        <h2 className="text-xl font-semibold mt-6 mb-2">1. What Data We Collect</h2>
+        <p className="text-white/70 mb-4">
+          We collect minimal personal information such as wallet address, email, and social handles as part of platform participation.
         </p>
-        <h2 className="text-xl font-semibold mt-6 mb-2">2. Usage of Data</h2>
-        <p className="mb-4">
-          Data is used strictly for internal analytics, airdrop distribution, user engagement, and fraud prevention.
+        <h2 className="text-xl font-semibold mt-6 mb-2">2. How Data is Stored</h2>
+        <p className="text-white/70 mb-4">
+          Data is stored on secure databases like Supabase with encryption and access control policies in place.
         </p>
-        <h2 className="text-xl font-semibold mt-6 mb-2">3. Data Security</h2>
-        <p className="mb-4">
-          We take appropriate measures to protect user data from unauthorized access, alteration, disclosure, or destruction.
+        <h2 className="text-xl font-semibold mt-6 mb-2">3. Your Rights</h2>
+        <p className="text-white/70 mb-4">
+          You may request to view, update, or delete your information by contacting us. We respect your privacy and your rights under applicable laws.
         </p>
-        <h2 className="text-xl font-semibold mt-6 mb-2">4. Retention</h2>
-        <p className="mb-4">
-          We retain personal data only as long as necessary to fulfill the purpose it was collected for or comply with legal requirements.
+        <h2 className="text-xl font-semibold mt-6 mb-2">4. Third Party Sharing</h2>
+        <p className="text-white/70 mb-4">
+          We do not share your personal data with any third party unless required for compliance or legal obligations.
         </p>
-        <p className="mt-10 text-sm text-white/70">Last updated: April 2025</p>
+        <p className="text-white/50 text-sm mt-10">
+          © 2025 BitFtx (Kuobit Labs Pvt Ltd). All rights reserved.
+        </p>
       </div>
-    );
-  }
-  
+    </div>
+  );
+}
