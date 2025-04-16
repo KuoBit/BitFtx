@@ -395,6 +395,13 @@ export default function Home() {
               <Image src="/icons/discord.svg" width={24} height={24} alt="Discord" />
             </a>
           </div>
+
+          <div className="text-sm text-white/50 flex flex-col sm:flex-row justify-center gap-4 mb-4">
+            <a href="/terms" className="hover:text-purple-400">Terms & Conditions</a>
+            <a href="/privacy" className="hover:text-purple-400">Privacy Policy</a>
+            <a href="/data-policy" className="hover:text-purple-400">Data Policy</a>
+          </div>
+
           <p className="text-sm text-white/50">&copy; 2025 BitFtx. All rights reserved.</p>
         </div>
       </footer>
