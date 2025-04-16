@@ -38,7 +38,6 @@ export default function Home() {
       },
     ]);
     if (error) {
-      console.log(error); // ADD THIS
       setMessage("❌ Error saving your submission.");
     } else {
       setMessage("✅ You're in! Thanks for joining the airdrop.");
