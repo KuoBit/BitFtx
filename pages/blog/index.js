@@ -9,7 +9,7 @@ export async function getStaticProps() {
     props: {
       posts: database,
     },
-    revalidate: 60, // Regenerate every 60 seconds
+   // revalidate: 60, // Regenerate every 60 seconds
   };
 }
 
