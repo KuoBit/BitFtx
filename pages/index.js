@@ -81,7 +81,7 @@ export default function Home() {
     <a href="#tokenomics" className="hover:text-white">Tokenomics</a>
     <a href="#roadmap" className="hover:text-white">Roadmap</a>
     <a href="#airdrop" className="hover:text-white">Airdrop</a>
-    <a href="/blog" className="hover:text-white font-medium text-purple-400">Blog</a>
+    <a href="/blog/" className="hover:text-white font-medium text-purple-400">Blog</a>
   </nav>
 </header>
 
@@ -403,7 +403,7 @@ export default function Home() {
             <a href="/terms.html" className="hover:text-purple-400">Terms & Conditions</a>
             <a href="/privacy.html" className="hover:text-purple-400">Privacy Policy</a>
             <a href="/data-policy.html" className="hover:text-purple-400">Data Policy</a>
-            <a href="/blog/index.html" className="hover:text-purple-400">Data Policy</a>
+            <a href="blog/" className="hover:text-purple-400">Blog</a>
           </div>
 
           <p className="text-sm text-white/50">&copy; 2025 BitFtx. All rights reserved.</p>
