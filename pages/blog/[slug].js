@@ -11,24 +11,26 @@ const Equation = dynamic(() => import("react-notion-x/build/third-party/equation
 const Modal = dynamic(() => import("react-notion-x/build/third-party/modal"));
 
 export default function BlogPost({ post }) {
-  if (!post) return <div className="text-white p-10">Post not found</div>;
+  if (!post || !post.page) {
+    return <div className="text-white p-10">Post not found</div>;
+  }
+
+  const props = post.page.properties || {};
+  const title = props.Title?.title?.[0]?.plain_text || "Untitled";
+  const summary = props.Preview?.rich_text?.[0]?.plain_text || "BitFtx blog post";
+  const createdAt = post.page.created_time || new Date().toISOString();
 
   return (
     <div className="bg-[#0b0b0c] text-white min-h-screen py-10 px-6 font-sans">
       <Head>
-        <title>{post.page.properties.Name.title[0]?.plain_text} – BitFtx Blog</title>
-        <meta
-          name="description"
-          content={post.page.properties.Summary?.rich_text[0]?.plain_text || "BitFtx blog post"}
-        />
+        <title>{title} – BitFtx Blog</title>
+        <meta name="description" content={summary} />
       </Head>
 
       <article className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">
-          {post.page.properties.Name.title[0]?.plain_text}
-        </h1>
+        <h1 className="text-4xl font-bold mb-4">{title}</h1>
         <p className="text-white/70 text-sm mb-8">
-          {new Date(post.page.created_time).toLocaleDateString()}
+          {new Date(createdAt).toLocaleDateString()}
         </p>
 
         <NotionRenderer
@@ -45,7 +47,7 @@ export default function BlogPost({ post }) {
 export async function getStaticPaths() {
   const posts = await getAllPosts();
   const paths = posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.slug || "" },
   }));
   return { paths, fallback: true };
 }
@@ -54,6 +56,5 @@ export async function getStaticProps({ params }) {
   const post = await getPostBySlug(params.slug);
   return {
     props: { post },
-  //  revalidate: 60,
   };
 }
