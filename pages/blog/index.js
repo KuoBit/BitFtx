@@ -1,0 +1,44 @@
+// pages/blog/index.js
+import Head from "next/head";
+import Link from "next/link";
+import { getDatabase } from "../../lib/notion";
+
+export async function getStaticProps() {
+  const database = await getDatabase();
+  return {
+    props: {
+      posts: database,
+    },
+    revalidate: 60, // Regenerate every 60 seconds
+  };
+}
+
+export default function Blog({ posts }) {
+  return (
+    <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
+      <Head>
+        <title>BitFtx Blog – Predictions, Insights, and Alpha</title>
+      </Head>
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-10 text-center">📰 BitFtx Blog</h1>
+        <div className="space-y-8">
+          {posts.map((post) => (
+            <div key={post.id} className="border border-white/10 p-6 rounded-lg hover:border-purple-400 transition-all">
+              <Link href={`/blog/${post.properties.slug.rich_text[0]?.plain_text || ""}`}>
+                <h2 className="text-2xl font-semibold hover:text-purple-400 transition">
+                  {post.properties.title.title[0]?.plain_text || "Untitled"}
+                </h2>
+              </Link>
+              <p className="text-white/70 mt-2">
+                {post.properties.preview?.rich_text[0]?.plain_text || "No preview available."}
+              </p>
+              <p className="text-white/40 text-sm mt-2">
+                {new Date(post.properties.date?.date?.start || post.created_time).toLocaleDateString()}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
