@@ -1,5 +1,5 @@
 // pages/blog/[slug].js
-import { getAllPosts, getPostBySlug } from "../lib/notion";
+import { getAllPosts, getPostBySlug } from "/lib/notions";
 import Head from "next/head";
 import { NotionRenderer } from "react-notion-x";
 import dynamic from "next/dynamic";
