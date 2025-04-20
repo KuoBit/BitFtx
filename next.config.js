@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    unoptimized: true
-  }
+  reactStrictMode: true,
+  // REMOVE this line if present:
+  // output: 'export',
 };
 
 module.exports = nextConfig;
