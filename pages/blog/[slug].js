@@ -12,7 +12,7 @@ const Modal = dynamic(() => import("react-notion-x/build/third-party/modal"));
 
 export default function BlogPost({ post }) {
   if (!post || !post.page) {
-    return <div className="text-white p-10">Post not found</div>;
+    return <div className="text-white p-10">❌ Post not found or failed to load.</div>;
   }
 
   const props = post.page.properties || {};
@@ -46,9 +46,12 @@ export default function BlogPost({ post }) {
 
 export async function getStaticPaths() {
   const posts = await getAllPosts();
-  const paths = posts.map((post) => ({
-    params: { slug: post.slug || "" },
-  }));
+  const paths = posts
+    .filter((post) => post.properties?.Slug?.rich_text?.[0]?.plain_text)
+    .map((post) => ({
+      params: { slug: post.properties.Slug.rich_text[0].plain_text },
+    }));
+
   return { paths, fallback: false };
 }
 
