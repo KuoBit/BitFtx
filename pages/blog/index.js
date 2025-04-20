@@ -12,6 +12,10 @@ export async function getStaticProps() {
   };
 }
 
+export const config = {
+  unstable_runtimeJS: false, // remove JS for fully static
+};
+
 export default function Blog({ posts }) {
   return (
     <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
