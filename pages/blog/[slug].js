@@ -46,17 +46,21 @@ export default function BlogPost({ post }) {
 
 export async function getStaticPaths() {
   const posts = await getAllPosts();
-  const paths = posts
-    .filter((post) => post.properties?.Slug?.rich_text?.[0]?.plain_text)
-    .map((post) => ({
-      params: { slug: post.properties.Slug.rich_text[0].plain_text },
-    }));
-
+  const paths = posts.map((post) => ({
+    params: { slug: post.slug },
+  }));
+  console.log("🧭 Static Paths:", paths);
   return { paths, fallback: false };
 }
 
 export async function getStaticProps({ params }) {
   const post = await getPostBySlug(params.slug);
+
+  if (!post) {
+    console.error("❌ Post not found for slug:", params.slug);
+    return { notFound: true };
+  }
+
   return {
     props: { post },
   };
