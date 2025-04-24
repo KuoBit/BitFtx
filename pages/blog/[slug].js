@@ -1,67 +1,50 @@
-// pages/blog/[slug].js
-import { getAllPosts, getPostBySlug } from "@/lib/notion";
+import { getPostBySlug } from "@/lib/notion";
 import Head from "next/head";
 import { NotionRenderer } from "react-notion-x";
 import dynamic from "next/dynamic";
 
-// Optional: Code & Equation renderers
+// Dynamic imports for heavy components
 const Code = dynamic(() => import("react-notion-x/build/third-party/code"));
 const Collection = dynamic(() => import("react-notion-x/build/third-party/collection"));
 const Equation = dynamic(() => import("react-notion-x/build/third-party/equation"));
 const Modal = dynamic(() => import("react-notion-x/build/third-party/modal"));
 
-export default function BlogPost({ post }) {
-  if (!post || !post.page) {
-    return <div className="text-white p-10">❌ Post not found or failed to load.</div>;
-  }
+export default function BlogPost({ recordMap }) {
+  if (!recordMap) return <div className="text-white p-10">Post not found</div>;
 
-  const props = post.page.properties || {};
-  const title = props.Title?.title?.[0]?.plain_text || "Untitled";
-  const summary = props.Preview?.rich_text?.[0]?.plain_text || "BitFtx blog post";
-  const createdAt = post.page.created_time || new Date().toISOString();
+  const pageBlock = Object.values(recordMap.block).find(
+    block => block.value?.type === 'page'
+  );
+
+  const title = pageBlock?.value?.properties?.Title?.[0]?.[0] || "Untitled";
 
   return (
     <div className="bg-[#0b0b0c] text-white min-h-screen py-10 px-6 font-sans">
       <Head>
         <title>{title} – BitFtx Blog</title>
-        <meta name="description" content={summary} />
       </Head>
 
       <article className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">{title}</h1>
-        <p className="text-white/70 text-sm mb-8">
-          {new Date(createdAt).toLocaleDateString()}
-        </p>
-
+        <h1 className="text-4xl font-bold mb-8">{title}</h1>
         <NotionRenderer
-          recordMap={post.recordMap}
+          recordMap={recordMap}
           components={{ Code, Collection, Equation, Modal }}
           darkMode={true}
-          fullPage={false}
         />
       </article>
     </div>
   );
 }
 
-export async function getStaticPaths() {
-  const posts = await getAllPosts();
-  const paths = posts.map((post) => ({
-    params: { slug: post.slug },
-  }));
-  console.log("🧭 Static Paths:", paths);
-  return { paths, fallback: false };
-}
+// Use SSR to fetch post dynamically
+export async function getServerSideProps({ params }) {
+  const recordMap = await getPostBySlug(params.slug);
 
-export async function getStaticProps({ params }) {
-  const post = await getPostBySlug(params.slug);
-
-  if (!post) {
-    console.error("❌ Post not found for slug:", params.slug);
+  if (!recordMap) {
     return { notFound: true };
   }
 
   return {
-    props: { post },
+    props: { recordMap },
   };
 }
