@@ -38,13 +38,12 @@ export default function BlogPost({ recordMap }) {
 
 // Use SSR to fetch post dynamically
 export async function getServerSideProps({ params }) {
-  const recordMap = await getPostBySlug(params.slug);
-
-  if (!recordMap) {
+  const post = await getPostBySlug(params.slug);
+  if (!post) {
     return { notFound: true };
   }
 
   return {
-    props: { recordMap },
+    props: { post },
   };
 }
