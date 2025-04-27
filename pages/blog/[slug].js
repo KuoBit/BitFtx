@@ -26,12 +26,8 @@ export default function BlogPost({ post }) {
           {new Date(meta.date).toLocaleDateString()}
         </p>
 
-        <NotionRenderer
-          recordMap={recordMap}
-          components={{ Code, Collection, Equation, Modal }}
-          darkMode={true}
-          fullPage={false}
-        />
+        <NotionRenderer recordMap={post.recordMap} fullPage={false} darkMode={true} />
+
       </article>
     </div>
   );
@@ -42,7 +38,6 @@ export async function getServerSideProps({ params }) {
   if (!post) {
     return { notFound: true };
   }
-
   return {
     props: { post },
   };
