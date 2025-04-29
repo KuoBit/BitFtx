@@ -28,48 +28,40 @@ export default function BlogPost({ post, error }) {
     );
   }
 
-  if (!post) return <div className="text-white p-10">Post not found</div>;
+  if (!post?.recordMap) {
+    return (
+      <div className="bg-[#0b0b0c] text-white min-h-screen p-10">
+        <Head>
+          <title>{post?.meta?.title || 'Post'} – BitFtx Blog</title>
+        </Head>
 
-  return (
-    <div className="bg-[#0b0b0c] text-white min-h-screen py-10 px-6 font-sans">
-      <Head>
-        <title>{post.meta.title} – BitFtx Blog</title>
-        <meta name="description" content={post.meta.preview} />
-      </Head>
-
-      <article className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">{post.meta.title}</h1>
-        <p className="text-white/70 text-sm mb-8">
-          {new Date(post.meta.date).toLocaleDateString()}
-        </p>
-
-        {post.recordMap ? (
-          <NotionRenderer 
-            recordMap={post.recordMap} 
-            fullPage={false} 
-            darkMode={true}
-            components={{
-              Code,
-              Collection,
-              Equation,
-              Modal
-            }}
-          />
-        ) : (
-          <div className="prose prose-invert">
-            {post.fallbackContent && (
-              <div dangerouslySetInnerHTML={{ __html: post.fallbackContent }} />
-            )}
-            {post.warning && (
-              <div className="bg-yellow-900/50 p-4 rounded-lg">
-                {post.warning}
+        <article className="max-w-3xl mx-auto">
+          <h1 className="text-4xl font-bold mb-4">{post?.meta?.title || 'Untitled Post'}</h1>
+          
+          <div className="bg-yellow-900/30 p-6 rounded-lg border border-yellow-700/50 mb-8">
+            <h2 className="text-xl font-semibold mb-2">Content Loading Issue</h2>
+            <p className="mb-4">We couldn't load the full post content, but here's what we have:</p>
+            
+            {post?.meta?.preview && (
+              <div className="prose prose-invert max-w-none">
+                <h3>Preview:</h3>
+                <p>{post.meta.preview}</p>
               </div>
             )}
+
+            <a 
+              href={post?.url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+            >
+              View Original in Notion
+            </a>
           </div>
-        )}
-      </article>
-    </div>
-  );
+        </article>
+      </div>
+    );
+  }
 }
 
 export async function getServerSideProps({ params }) {
