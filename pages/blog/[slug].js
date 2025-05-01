@@ -4,7 +4,6 @@ import { NotionRenderer } from "react-notion-x";
 import dynamic from "next/dynamic";
 import { useRouter } from 'next/router';
 
-// Dynamic imports for Notion components
 const Code = dynamic(() => 
   import("react-notion-x/build/third-party/code").then((mod) => mod.Code)
 );
@@ -39,46 +38,13 @@ export default function BlogPost({ post, error }) {
     );
   }
 
-  if (!post) {
+  if (!post || !post.meta) {
     return (
       <div className="bg-[#0b0b0c] text-white min-h-screen p-10">
         <Head>
           <title>Post Not Found - BitFtx Blog</title>
         </Head>
         <h1 className="text-2xl font-bold mb-4">Post Not Found</h1>
-      </div>
-    );
-  }
-
-  if (!post.recordMap && !post.fallbackContent) {
-    return (
-      <div className="bg-[#0b0b0c] text-white min-h-screen p-10">
-        <Head>
-          <title>{post.meta?.title || 'Post'} - BitFtx Blog</title>
-        </Head>
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold mb-4">
-            {post.meta?.title || 'Untitled Post'}
-          </h1>
-          <div className="bg-yellow-900/30 p-6 rounded-lg border border-yellow-700/50 mb-8">
-            <h2 className="text-xl font-semibold mb-2">Content Loading Issue</h2>
-            {post.meta?.preview && (
-              <div className="prose prose-invert max-w-none">
-                <p>{post.meta.preview}</p>
-              </div>
-            )}
-            {post.url && (
-              <a 
-                href={post.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
-              >
-                View Original in Notion
-              </a>
-            )}
-          </div>
-        </div>
       </div>
     );
   }
