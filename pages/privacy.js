@@ -5,6 +5,9 @@ import Footer from '@/components/Footer';
 
 export default function Privacy() {
   return (
+      <>
+              <Header />
+            
     <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
       <Head>
         <title>Privacy Policy – BitFtx</title>
@@ -36,5 +39,7 @@ export default function Privacy() {
         </p>
       </div>
     </div>
+     <Footer />
+            </>
   );
 }

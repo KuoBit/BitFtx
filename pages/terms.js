@@ -5,6 +5,9 @@ import Footer from '@/components/Footer';
 
 export default function Terms() {
   return (
+    <>
+          <Header />
+        
     <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
       <Head>
         <title>Terms & Conditions – BitFtx</title>
@@ -32,5 +35,7 @@ export default function Terms() {
         </p>
       </div>
     </div>
+      <Footer />
+        </>
   );
 }

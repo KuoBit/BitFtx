@@ -5,7 +5,9 @@ import Footer from '@/components/Footer';
 
 export default function DataPolicy() {
   return (
-    
+      <>
+              <Header />
+            
     <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
       <Head>
         <title>Data Policy – BitFtx</title>
@@ -33,5 +35,7 @@ export default function DataPolicy() {
         </p>
       </div>
     </div>
+     <Footer />
+            </>
   );
 }
