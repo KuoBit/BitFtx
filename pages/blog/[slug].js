@@ -95,19 +95,8 @@ export default function BlogPost({ post, error }) {
 }
 
 export async function getServerSideProps({ params }) {
-  try {
-    const post = await getPostBySlug(params.slug);
-    if (!post) {
-      return { notFound: true };
-    }
-    return { props: { post } };
-  } catch (error) {
-    console.error('Error in getServerSideProps:', error);
-    return {
-      props: {
-        error: error.message,
-        post: null
-      }
-    };
-  }
+  const post = await getPostBySlug(params.slug)
+  if (!post) return { notFound: true }
+  return { props: { post } }
 }
+
