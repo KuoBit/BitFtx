@@ -49,12 +49,14 @@ export default function BlogPost({ post, error }) {
           {new Date(post.meta.date).toLocaleDateString()}
         </p>
 
-        <NotionRenderer
-          recordMap={post.recordMap}
-          components={{ Code, Collection, Equation, Modal }}
-          darkMode
-          fullPage={false}
-        />
+        <article className="max-w-3xl mx-auto prose prose-invert">
+  <NotionRenderer
+    recordMap={post.recordMap}
+    fullPage={false}
+    darkMode
+    components={{ Code, Collection, Equation, Modal }}
+  />
+</article>
       </article>
     </div>
   );
