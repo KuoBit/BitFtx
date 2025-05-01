@@ -23,11 +23,9 @@ export default function Blog({ posts, error }) {
           {posts.map((post) => (
             <div key={post.id} className="border border-white/10 p-6 rounded-lg hover:border-purple-400 transition-all">
               <Link href={`/blog/${post.slug}`}>
-                <a>
-                  <h2 className="text-2xl font-semibold hover:text-purple-400 transition">
-                    {post.title}
-                  </h2>
-                </a>
+                <h2 className="text-2xl font-semibold hover:text-purple-400 transition">
+                  {post.title}
+                </h2>
               </Link>
               <p className="text-white/70 mt-2">{post.preview}</p>
               <p className="text-white/40 text-sm mt-2">
@@ -43,15 +41,25 @@ export default function Blog({ posts, error }) {
 
 export async function getServerSideProps() {
   try {
-    const posts = await getDatabase();
+    const response = await getDatabase();
+    const posts = response.map((page) => {
+      const props = page.properties || {};
+      return {
+        id: page.id,
+        slug: props.Slug?.rich_text?.[0]?.plain_text || '',
+        title: props.Title?.title?.[0]?.plain_text || 'Untitled',
+        preview: props.Preview?.rich_text?.[0]?.plain_text || '',
+        date: props.Publish_Date?.date?.start || page.created_time,
+      };
+    });
     return {
       props: { posts },
     };
   } catch (error) {
     return {
-      props: { 
+      props: {
         posts: [],
-        error: error.message 
+        error: error.message,
       },
     };
   }
