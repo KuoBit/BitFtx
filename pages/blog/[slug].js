@@ -74,11 +74,12 @@ export default function BlogPost({ post, error }) {
           </div>
 
           <NotionRenderer
-            recordMap={cleanedRecordMap}
-            fullPage={false}
-            darkMode={true}
-            components={{ Code, Collection, Equation, Modal }}
-          />
+  recordMap={cleanedRecordMap}
+  fullPage={false}
+  darkMode={true}
+  components={{ Code, Collection, Equation, Modal }}
+  disableHeader={true} // 🚫 Prevents auto-rendering of page properties
+/>
         </article>
       </main>
       <Footer />
