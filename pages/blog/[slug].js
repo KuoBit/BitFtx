@@ -75,10 +75,10 @@ export default function BlogPost({ post, error }) {
 
           <NotionRenderer
   recordMap={cleanedRecordMap}
-  fullPage={false}
+  fullPage={true}            // MUST be true
   darkMode={true}
+  disableHeader={true}       // finally respected now
   components={{ Code, Collection, Equation, Modal }}
-  disableHeader={true} // 🚫 Prevents auto-rendering of page properties
 />
         </article>
       </main>
