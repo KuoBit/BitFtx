@@ -41,14 +41,9 @@ export default function BlogPost({ post, error }) {
 
   // ❌ Strip out all Notion auto-rendered metadata blocks
   const filteredBlocks = Object.fromEntries(
-    Object.entries(recordMap.block || {}).filter(([key, blk]) => {
-      const type = blk.value?.type || "";
-      return !(
-        type.startsWith("property_") ||
-        type === "collection_view_page" ||
-        (type === "page" && blk.value?.parent_table === "collection")
-      );
-    })
+    Object.entries(recordMap.block || {}).filter(
+      ([, blk]) => !blk.value?.type?.startsWith('property_')
+    )
   );
 
   const cleanedRecordMap = {
