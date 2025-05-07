@@ -46,14 +46,14 @@ export default function BlogPost({ post, error }) {
     )
   );
 
-  const cleanedRecordMap = {
-    ...recordMap,
-    block: filteredBlocks,
-    collection: {},
-    collection_query: {},
-    collection_view: {},
-    schema: {},
-  };
+  //const cleanedRecordMap = {
+  //  ...recordMap,
+  //  block: filteredBlocks,
+  //  collection: {},
+  //  collection_query: {},
+  //  collection_view: {},
+  //  schema: {},
+  //};
 
   return (
     <>
