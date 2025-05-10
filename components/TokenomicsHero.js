@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export default function TokenomicsHero() {
   return (
-    <section className="bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white py-20 px-6 text-center">
-      <div className="max-w-4xl mx-auto">
+<section className="min-h-screen w-full bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white ...">
+<div className="max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-6xl font-bold mb-6">
           $BFTX Tokenomics
         </h1>
