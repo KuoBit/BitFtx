@@ -1,4 +1,5 @@
 import TokenomicsHero from "@/components/TokenomicsHero";
+import TokenOverview from "@/components/TokenOverview";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
