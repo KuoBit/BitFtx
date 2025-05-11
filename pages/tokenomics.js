@@ -1,5 +1,6 @@
 import TokenomicsHero from "@/components/TokenomicsHero";
 import TokenOverview from "@/components/TokenOverview";
+import TokenAllocation from "@/components/TokenAllocation";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -15,6 +16,7 @@ export default function TokenomicsPage() {
     <Header />
       <TokenomicsHero />
       <TokenOverview />
+      <TokenAllocation />
     <Footer />
     </>
   );
