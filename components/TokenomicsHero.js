@@ -22,17 +22,6 @@ export default function TokenomicsHero() {
         <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
           The fuel that powers BitFtx’s decentralized prediction ecosystem.
         </p>
-
-        <div className="flex justify-center gap-4 flex-wrap">
-        <Link href="/airdrop" className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-2xl text-base font-semibold shadow transition">
-  Join Airdrop
-</Link>
-          <Link href="#token-overview">
-            <a className="border border-white/20 hover:border-white text-white/80 hover:text-white px-6 py-3 rounded-2xl text-base font-semibold transition">
-              Learn More
-            </a>
-          </Link>
-        </div>
       </div>
     </section>
   );
