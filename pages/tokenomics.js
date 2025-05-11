@@ -13,6 +13,7 @@ export default function TokenomicsPage() {
     <>
     <Header />
       <TokenomicsHero />
+      <TokenOverview />
     <Footer />
     </>
   );
