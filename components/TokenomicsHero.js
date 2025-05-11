@@ -24,11 +24,9 @@ export default function TokenomicsHero() {
         </p>
 
         <div className="flex justify-center gap-4 flex-wrap">
-          <Link href="/airdrop">
-            <a className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-2xl text-base font-semibold shadow transition">
-              Join Airdrop
-            </a>
-          </Link>
+        <Link href="/airdrop" className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-2xl text-base font-semibold shadow transition">
+  Join Airdrop
+</Link>
           <Link href="#token-overview">
             <a className="border border-white/20 hover:border-white text-white/80 hover:text-white px-6 py-3 rounded-2xl text-base font-semibold transition">
               Learn More
