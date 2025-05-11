@@ -26,7 +26,6 @@ export default function TokenomicsPage() {
       <TokenUtility />
       <FundUsage />
       <TokenFAQ />
-
     <Footer />
     </>
   );
