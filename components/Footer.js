@@ -26,6 +26,7 @@ export default function Footer() {
             <a href="/terms" className="hover:text-purple-400">Terms & Conditions</a>
             <a href="/privacy" className="hover:text-purple-400">Privacy Policy</a>
             <a href="/data-policy" className="hover:text-purple-400">Data Policy</a>
+            <a href="/sitemap.xml" className="hover:text-purple-400">Data Policy</a>
             <a href="blog" className="hover:text-purple-400">Blog</a>
           </div>
 
