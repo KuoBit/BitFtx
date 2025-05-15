@@ -40,12 +40,19 @@ export default function TokenAllocationChart() {
             ))}
           </Pie>
           <Tooltip
-            contentStyle={{
-              backgroundColor: "#1a1a1d",
-              borderColor: "#444",
-              color: "#fff",
-            }}
-          />
+  contentStyle={{
+    backgroundColor: "#1a1a1d",
+    borderColor: "#444",
+  }}
+  itemStyle={{
+    color: "#fff",            // ✅ fixes text color
+    fontSize: "14px",
+  }}
+  labelStyle={{
+    color: "#ccc",            // optional: lighter label text
+    fontWeight: "bold",
+  }}
+/>
           <Legend
             wrapperStyle={{
               color: "white",
