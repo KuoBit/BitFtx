@@ -5,15 +5,15 @@ import TokenVesting from "@/components/TokenVesting";
 import TokenUtility from "@/components/TokenUtility";
 import FundUsage from "@/components/FundUsage";
 import TokenFAQ from "@/components/TokenFAQ";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import PageWrapper from "@/components/PageWrapper"; // ✅ import wrapper
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function TokenomicsPage() {
   return (
-    <>
+    <div className="bg-[#0b0b0c] text-white min-h-screen font-sans">
       <Header />
-      <PageWrapper>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <TokenomicsHero />
         <TokenOverview />
         <TokenAllocation />
@@ -21,8 +21,9 @@ export default function TokenomicsPage() {
         <TokenUtility />
         <FundUsage />
         <TokenFAQ />
-      </PageWrapper>
+      </main>
+
       <Footer />
-    </>
+    </div>
   );
 }
