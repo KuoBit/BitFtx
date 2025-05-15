@@ -4,11 +4,11 @@ import Image from "next/image";
 
 export default function TokenomicsHero() {
   return (
-    <section className="relative bg-[#0b0b0c] text-white pt-48 pb-32 px-6 text-center overflow-hidden min-h-screen">
-      {/* Optional Background Pattern or Overlay */}
+    <section className="relative bg-[#0b0b0c] text-white pt-32 pb-24 px-6 text-center overflow-hidden">
+      {/* Optional Background Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 to-black z-0 pointer-events-none" />
 
-      <div className="relative z-10 max-w-4xl mx-auto">
+      <div className="relative z-10 max-w-5xl mx-auto">
         <Image
           src="/logo.png"
           alt="BitFtx Logo"

@@ -47,21 +47,21 @@ export default function TokenAllocation() {
   return (
     <section
       id="token-allocation"
-      className="py-20 px-6 bg-[#0f0f11] text-white text-center"
+      className="py-24 px-6 bg-[#0f0f11] text-white text-center"
     >
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-10">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-12">
           📊 Token Allocation
         </h2>
 
-        {/* Chart Section */}
-        <div className="mb-12">
+        {/* Chart */}
+        <div className="w-full max-w-3xl mx-auto mb-14 px-2">
           <TokenAllocationChart />
         </div>
 
-        {/* Allocation Table */}
+        {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full table-auto text-left border border-white/10 rounded-xl overflow-hidden shadow-lg">
+          <table className="w-full text-left border border-white/10 rounded-xl overflow-hidden shadow">
             <thead className="bg-[#1a1a1d] text-white/60 text-sm uppercase tracking-wide">
               <tr>
                 <th className="py-3 px-4">Category</th>

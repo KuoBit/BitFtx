@@ -41,23 +41,29 @@ export default function TokenFAQ() {
   };
 
   return (
-    <section id="faq" className="py-20 px-6 bg-[#0f0f11] text-white text-center">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-10">❓ Frequently Asked Questions</h2>
+    <section id="faq" className="py-24 px-6 bg-[#0f0f11] text-white text-center">
+      <div className="max-w-5xl mx-auto">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-8">❓ Frequently Asked Questions</h2>
 
-        <div className="space-y-4 text-left">
+        <div className="space-y-5 text-left">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="border border-white/10 rounded-lg p-4 bg-[#1a1a1d] cursor-pointer transition hover:border-white/20"
+              className={`border rounded-xl px-5 py-4 bg-[#1a1a1d] transition cursor-pointer ${
+                openIndex === index
+                  ? "border-white/20"
+                  : "border-white/10 hover:border-white/20"
+              }`}
               onClick={() => toggle(index)}
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-medium">{faq.question}</h3>
-                <span className="text-purple-400">{openIndex === index ? "−" : "+"}</span>
+                <span className="text-purple-400 text-xl font-bold">
+                  {openIndex === index ? "−" : "+"}
+                </span>
               </div>
               {openIndex === index && (
-                <p className="mt-2 text-white/70">{faq.answer}</p>
+                <p className="mt-3 text-white/70">{faq.answer}</p>
               )}
             </div>
           ))}
