@@ -78,8 +78,7 @@ export default function Home() {
   </div>
   <nav className="space-x-6 text-sm text-white/80 hidden sm:block">
     <a href="#about" className="hover:text-white">About</a>
-    <a href="#tokenomics" className="hover:text-white">Tokenomics</a>
-    <a href="#roadmap" className="hover:text-white">Roadmap</a>
+    <a href="/tokenomics" className="hover:text-white font-medium text-purple-400">Tokenomics</a>    <a href="#roadmap" className="hover:text-white">Roadmap</a>
     <a href="#airdrop" className="hover:text-white">Airdrop</a>
     <a href="/blog" className="hover:text-white font-medium text-purple-400">Blog</a>
   </nav>
