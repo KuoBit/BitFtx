@@ -45,18 +45,23 @@ export default function TokenAllocation() {
   ];
 
   return (
-    <section id="token-allocation" className="py-20 px-6 bg-[#0f0f11] text-white text-center">
+    <section
+      id="token-allocation"
+      className="py-20 px-6 bg-[#0f0f11] text-white text-center"
+    >
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-10">📊 Token Allocation</h2>
+        <h2 className="text-3xl sm:text-4xl font-bold mb-10">
+          📊 Token Allocation
+        </h2>
 
-        {/* Fixed Chart */}
-        <div className="h-72 sm:h-96 mb-12">
+        {/* Chart Section */}
+        <div className="mb-12">
           <TokenAllocationChart />
         </div>
 
         {/* Allocation Table */}
         <div className="overflow-x-auto">
-          <table className="w-full table-auto text-left border border-white/10 rounded-lg overflow-hidden">
+          <table className="w-full table-auto text-left border border-white/10 rounded-xl overflow-hidden shadow-lg">
             <thead className="bg-[#1a1a1d] text-white/60 text-sm uppercase tracking-wide">
               <tr>
                 <th className="py-3 px-4">Category</th>
@@ -67,7 +72,10 @@ export default function TokenAllocation() {
             </thead>
             <tbody>
               {tableData.map((row, i) => (
-                <tr key={i} className="border-t border-white/10 hover:bg-[#1f1f22] transition">
+                <tr
+                  key={i}
+                  className="border-t border-white/10 hover:bg-[#1f1f22] transition"
+                >
                   <td className="py-3 px-4 font-medium">{row.category}</td>
                   <td className="py-3 px-4">{row.percent}</td>
                   <td className="py-3 px-4">{row.tokens}</td>
