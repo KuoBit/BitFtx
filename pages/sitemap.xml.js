@@ -4,7 +4,7 @@ import { getPublishedBlogSlugs } from "../lib/notion";
 export async function getServerSideProps({ res }) {
   const baseUrl = "https://www.bitftx.com";
 
-  const staticRoutes = ["/", "/tokenomics", "/airdrop", "/blog"];
+  const staticRoutes = ["/", "/tokenomics", "/airdrop", "/blog", "/terms", "/privacy", "/data-policy"];
 
   const blogSlugs = await getPublishedBlogSlugs();
   const blogRoutes = blogSlugs.map((slug) => `/blog/${slug}`);
