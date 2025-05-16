@@ -22,6 +22,27 @@ export default function Home() {
   
   const [message, setMessage] = useState(null);
   
+  const addTokenToWallet = () => {
+    if (typeof window !== "undefined" && window.ethereum) {
+      try {
+        window.ethereum.request({
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20",
+            options: {
+              address: contractAddress,
+              symbol: symbol,
+              decimals: 18,
+              image: "/logo.png",
+            },
+          },
+        });
+      } catch (error) {
+        console.error("Failed to add token", error);
+      }
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
