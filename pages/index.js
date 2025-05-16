@@ -132,6 +132,41 @@ export default function Home() {
   </div>
 </section>
 
+{/* Token Live CTA Section */}
+<section className="py-16 px-4 md:px-20 bg-[#101012] text-white text-center">
+  <h2 className="text-3xl font-bold mb-6">🚀 $BFTX is Now Live!</h2>
+  <p className="text-white/70 mb-6">
+    You can now trade, chart, or add $BFTX directly to your wallet.
+  </p>
+  <div className="flex flex-wrap gap-4 justify-center">
+    <a
+      href="https://pancakeswap.finance/swap?outputCurrency=0x42E6a5e559169b4cc5DEeB748795aE5F1970B221&use=V2"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded font-semibold">
+        Buy on PancakeSwap
+      </button>
+    </a>
+    <a
+      href="https://dexscreener.com/bsc/0x42E6a5e559169b4cc5DEeB748795aE5F1970B221"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <button className="border border-white/20 px-6 py-2 rounded font-semibold">
+        View Chart
+      </button>
+    </a>
+    <button
+      onClick={addTokenToWallet}
+      className="underline text-sm text-purple-400 hover:text-purple-300"
+    >
+      + Add $BFTX to MetaMask
+    </button>
+  </div>
+</section>
+
+
 {/* Token Utility Section */}
 <section id="utility" className="py-20 px-6 bg-[#0f0f11] text-white text-center">
   <div className="max-w-4xl mx-auto">
@@ -179,6 +214,12 @@ export default function Home() {
     <p className="text-white/80 text-lg mb-10">
       A fair and forward-looking distribution designed to fuel growth, reward believers, and power the ecosystem.
     </p>
+
+    <p className="text-sm text-purple-400 mt-2">
+  🔗 <a href="https://bscscan.com/token/0x42E6a5e559169b4cc5DEeB748795aE5F1970B221" target="_blank" rel="noopener noreferrer">View Contract</a> &nbsp;|&nbsp;
+  <a href="https://pancakeswap.finance/swap?outputCurrency=0x42E6a5e559169b4cc5DEeB748795aE5F1970B221&use=V2" target="_blank" rel="noopener noreferrer">Trade on PancakeSwap</a> &nbsp;|&nbsp;
+  <a href="https://dexscreener.com/bsc/0x42E6a5e559169b4cc5DEeB748795aE5F1970B221" target="_blank" rel="noopener noreferrer">Live Chart</a>
+</p>
 
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
       <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
@@ -361,8 +402,8 @@ export default function Home() {
           <span className="text-purple-400 group-hover:rotate-180 transition-transform">▼</span>
         </button>
         <div className="px-6 pb-4 text-white/70 hidden group-focus-within:block">
-          $BFTX will launch on decentralized exchanges (Uniswap, etc.) in Q2 2025. CEX listings will follow based on community votes.
-        </div>
+  Yes! $BFTX is live and tradable on PancakeSwap (V2). You can also view the price chart on Dexscreener and verify the contract on BscScan.
+</div>
       </div>
 
       {/* Question 4 */}
