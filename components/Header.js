@@ -31,6 +31,7 @@ export default function Header() {
       <nav className="space-x-6 text-sm text-white/80 hidden sm:block">
         <button onClick={() => handleScroll("about")} className="hover:text-white">About</button>
         <Link href="/tokenomics" className="hover:text-white font-medium text-purple-400">Tokenomics</Link>
+        <Link href="/whitepaper" className="hover:text-white font-medium text-purple-400">WhitePaper</Link>
         <button onClick={() => handleScroll("roadmap")} className="hover:text-white">Roadmap</button>
         <button onClick={() => handleScroll("airdrop")} className="hover:text-white">Airdrop</button>
         <Link href="/blog" className="hover:text-white font-medium text-purple-400">Blog</Link>
