@@ -242,32 +242,45 @@ export default function Home() {
   <a href="https://dexscreener.com/bsc/0x42E6a5e559169b4cc5DEeB748795aE5F1970B221" target="_blank" rel="noopener noreferrer">Live Chart</a>
 </p>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
-      <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
-        <h3 className="text-xl font-semibold">🧑‍🤝‍🧑 Community Incentives</h3>
-        <p className="text-white/70 mt-1">50% – Rewards, airdrops, liquidity mining, staking</p>
-      </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+  <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
+    <h3 className="text-xl font-semibold">🧑‍🤝‍🧑 Community Rewards</h3>
+    <p className="text-white/70 mt-1">30% – Prediction rewards, staking, contributor incentives</p>
+  </div>
 
-      <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
-        <h3 className="text-xl font-semibold">💧 Liquidity & Exchanges</h3>
-        <p className="text-white/70 mt-1">20% – Initial liquidity pools, CEX listings</p>
-      </div>
+  <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
+    <h3 className="text-xl font-semibold">👨‍💼 Team & Advisors</h3>
+    <p className="text-white/70 mt-1">20% – Core contributors, advisor allocation (with vesting)</p>
+  </div>
 
-      <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
-        <h3 className="text-xl font-semibold">👨‍💻 Core Team & Advisors</h3>
-        <p className="text-white/70 mt-1">15% – Team vesting, advisor support</p>
-      </div>
+  <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
+    <h3 className="text-xl font-semibold">🏦 Treasury Reserve</h3>
+    <p className="text-white/70 mt-1">15% – Ecosystem growth, grants, insurance</p>
+  </div>
 
-      <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
-        <h3 className="text-xl font-semibold">🤝 Partnerships & Growth</h3>
-        <p className="text-white/70 mt-1">10% – Strategic partners, ecosystem expansion</p>
-      </div>
+  <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
+    <h3 className="text-xl font-semibold">🔒 Private Sale</h3>
+    <p className="text-white/70 mt-1">15% – Strategic early backers, vesting enforced</p>
+  </div>
 
-      <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10 sm:col-span-2">
-        <h3 className="text-xl font-semibold">🌱 Ecosystem Reserve</h3>
-        <p className="text-white/70 mt-1">5% – Future use, insurance, sustainability</p>
-      </div>
-    </div>
+  <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
+    <h3 className="text-xl font-semibold">🌍 Public Sale (IDO)</h3>
+    <p className="text-white/70 mt-1">10% – Launchpad offerings, DEX liquidity</p>
+  </div>
+
+  <div className="bg-[#1a1a1d] p-5 rounded-lg border border-white/10">
+    <h3 className="text-xl font-semibold">💧 Liquidity & CEX</h3>
+    <p className="text-white/70 mt-1">10% – PancakeSwap, future CEX listings</p>
+  </div>
+</div>
+<div className="mt-10">
+  <a
+    href="/tokenomics"
+    className="inline-block px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition"
+  >
+    📖 View Full Tokenomics
+  </a>
+</div>
   </div>
 </section>
 
