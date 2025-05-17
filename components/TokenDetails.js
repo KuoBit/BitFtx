@@ -46,13 +46,4 @@ const addTokenToWallet = () => {
 </button>
   </div>
 
-  {/* Optional Dexscreener Chart Embed */}
-  <iframe
-    src="https://dexscreener.com/bsc/0x42E6a5e559169b4cc5DEeB748795aE5F1970B221?embed=1&theme=dark"
-    height="400"
-    width="100%"
-    frameBorder="0"
-    className="rounded-lg border border-white/10"
-    allowTransparency="true"
-  ></iframe>
 </section>
