@@ -103,6 +103,9 @@ export default function Home() {
     <a href="#about" className="hover:text-white">About</a>
     <a href="/tokenomics" className="hover:text-white font-medium text-purple-400">Tokenomics</a>    
     <a href="/whitepaper" className="hover:text-white font-medium text-purple-400">Whitepaper</a>
+    <Link href="https://pancakeswap.finance/swap?outputCurrency=0x42E6a5e559169b4cc5DEeB748795aE5F1970B221&use=V2" className="hover:text-white font-medium text-purple-400">Buy on PancakeSwap</Link>
+        <Link href="https://dexscreener.com/bsc/0x42E6a5e559169b4cc5DEeB748795aE5F1970B221" className="hover:text-white font-medium text-purple-400">DexScanner</Link>
+        <button onClick={{addTokenToWallet}} className="hover:text-white">Add to Metamask</button>
     <a href="#roadmap" className="hover:text-white">Roadmap</a>
     <a href="#airdrop" className="hover:text-white">Airdrop</a>
     <a href="/blog" className="hover:text-white font-medium text-purple-400">Blog</a>
