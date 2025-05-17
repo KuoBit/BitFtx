@@ -1,13 +1,13 @@
 // pages/whitepaper.js
 import Head from "next/head";
-import WhitepaperIntro from "@/components/whitepaper/Intro";
-import MarketProblem from "@/components/whitepaper/MarketProblem";
-import Architecture from "@/components/whitepaper/Architecture";
-import TokenUtility from "@/components/whitepaper/WPTokenUtility";
-import TokenomicsSection from "@/components/whitepaper/WPTokenomics";
-import Roadmap from "@/components/whitepaper/Roadmap";
-import Governance from "@/components/whitepaper/Governance";
-import Legal from "@/components/whitepaper/Legal";
+import WhitepaperIntro from "@/components/Intro";
+import MarketProblem from "@/components/MarketProblem";
+import Architecture from "@/components/Architecture";
+import TokenUtility from "@/components/WPTokenUtility";
+import TokenomicsSection from "@/components/WPTokenomics";
+import Roadmap from "@/components/Roadmap";
+import Governance from "@/components/Governance";
+import Legal from "@/components/Legal";
 
 export default function Whitepaper() {
   return (
