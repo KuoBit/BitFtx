@@ -58,7 +58,7 @@ export default function Header() {
         <Link href="/whitepaper" className="hover:text-white font-medium text-purple-400">WhitePaper</Link>
         <Link href="https://pancakeswap.finance/swap?outputCurrency=0x42E6a5e559169b4cc5DEeB748795aE5F1970B221&use=V2" className="hover:text-white font-medium text-purple-400">Buy on PancakeSwap</Link>
         <Link href="https://dexscreener.com/bsc/0x42E6a5e559169b4cc5DEeB748795aE5F1970B221" className="hover:text-white font-medium text-purple-400">DexScanner</Link>
-        <button onClick={{addTokenToWallet}} className="hover:text-white">Add to Metamask</button>
+        <button onClick={addTokenToWallet} className="hover:text-white">Add to Metamask</button>
         <button onClick={() => handleScroll("roadmap")} className="hover:text-white">Roadmap</button>
         <button onClick={() => handleScroll("airdrop")} className="hover:text-white">Airdrop</button>
         <Link href="/blog" className="hover:text-white font-medium text-purple-400">Blog</Link>
