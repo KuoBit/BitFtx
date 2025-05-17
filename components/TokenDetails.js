@@ -1,4 +1,5 @@
 {/* Token Actions CTA */}
+import { useState, useEffect } from "react";
 
 const addTokenToWallet = () => {
     if (typeof window !== "undefined" && window.ethereum) {
@@ -16,6 +17,7 @@ const addTokenToWallet = () => {
       });
     }
   };
+  
 
 <section className="py-10 text-center bg-[#101012] text-white">
   <h2 className="text-2xl font-bold mb-4">🚀 Trade $BFTX Now</h2>
