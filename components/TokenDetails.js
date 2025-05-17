@@ -1,4 +1,22 @@
 {/* Token Actions CTA */}
+
+const addTokenToWallet = () => {
+    if (typeof window !== "undefined" && window.ethereum) {
+      window.ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: "0x42E6a5e559169b4cc5DEeB748795aE5F1970B221",
+            symbol: "BFTX",
+            decimals: 18,
+            image: "/logo.png",
+          },
+        },
+      });
+    }
+  };
+
 <section className="py-10 text-center bg-[#101012] text-white">
   <h2 className="text-2xl font-bold mb-4">🚀 Trade $BFTX Now</h2>
   <p className="text-white/70 mb-6">Live on PancakeSwap • View chart • Add to MetaMask</p>
@@ -21,26 +39,11 @@
       View Live Chart
     </a>
     <button
-      onClick={() => {
-        if (typeof window !== "undefined" && window.ethereum) {
-          window.ethereum.request({
-            method: "wallet_watchAsset",
-            params: {
-              type: "ERC20",
-              options: {
-                address: "0x42E6a5e559169b4cc5DEeB748795aE5F1970B221",
-                symbol: "BFTX",
-                decimals: 18,
-                image: "/logo.png",
-              },
-            },
-          });
-        }
-      }}
-      className="underline text-purple-400 hover:text-purple-300 text-sm self-center"
-    >
-      + Add $BFTX to MetaMask
-    </button>
+  onClick={addTokenToWallet}
+  className="underline text-purple-400 hover:text-purple-300 text-sm self-center"
+>
+  + Add $BFTX to MetaMask
+</button>
   </div>
 
   {/* Optional Dexscreener Chart Embed */}
