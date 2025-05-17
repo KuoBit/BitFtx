@@ -5,6 +5,7 @@ import TokenVesting from "@/components/TokenVesting";
 import TokenUtility from "@/components/TokenUtility";
 import FundUsage from "@/components/FundUsage";
 import TokenFAQ from "@/components/TokenFAQ";
+import TokenDetails from "@/components/TokenDetails";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -16,6 +17,7 @@ export default function TokenomicsPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <TokenomicsHero />
         <TokenOverview />
+        <TokenDetails />
         <TokenAllocation />
         <TokenVesting />
         <TokenUtility />
