@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
+import Link from "next/link";
+
 
 const supabase = createClient(
   "https://onevirzsdrfxposewozx.supabase.co", // your actual URL
