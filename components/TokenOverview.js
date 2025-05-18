@@ -6,7 +6,7 @@ export default function TokenOverview() {
     { label: "Token Type", value: "ERC-20" },
     { label: "Network", value: "Ethereum / Base / Polygon" }, // update final one later
     { label: "Decimals", value: "18" },
-    { label: "Contract Address", value: "To be announced" },
+    { label: "Contract Address", value: "0x42E6a5e559169b4cc5DEeB748795aE5F1970B221" },
   ];
 
   return (
