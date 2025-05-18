@@ -8,6 +8,8 @@ import TokenomicsSection from "@/components/WPTokenomics";
 import Roadmap from "@/components/Roadmap";
 import Governance from "@/components/Governance";
 import Legal from "@/components/Legal";
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function Whitepaper() {
   return (
