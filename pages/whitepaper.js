@@ -18,7 +18,7 @@ export default function Whitepaper() {
         <meta property="og:title" content="BitFtx Whitepaper" />
         <meta property="og:image" content="/logo.png" />
       </Head>
-
+       <Header />
       <main className="px-6 py-20 max-w-5xl mx-auto space-y-20">
         <WhitepaperIntro />
         <MarketProblem />
@@ -29,6 +29,7 @@ export default function Whitepaper() {
         <Governance />
         <Legal />
       </main>
+       <Footer />
     </div>
   );
 }
