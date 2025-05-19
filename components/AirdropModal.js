@@ -43,16 +43,16 @@ export default function AirdropModal({ onSubmit }) {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center">
-      <div className="bg-[#111114] p-8 rounded-lg text-white max-w-md w-full relative">
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+      <div className="bg-[#111114] p-6 sm:p-8 rounded-lg text-white w-full max-w-lg relative shadow-2xl">
         <button
           onClick={() => setVisible(false)}
-          className="absolute top-3 right-4 text-white text-xl hover:text-purple-400"
+          className="absolute top-3 right-4 text-white text-2xl hover:text-purple-400"
         >
-          ✕
+          &times;
         </button>
-        <h2 className="text-2xl font-bold mb-4">🎁 Join the $BFTX Airdrop</h2>
-        <p className="text-white/70 mb-4">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-center">🎁 Join the $BFTX Airdrop</h2>
+        <p className="text-white/70 mb-4 text-center">
           Fill in the details below to qualify for the upcoming airdrop.
         </p>
         <form onSubmit={handleSubmit} className="space-y-3">
