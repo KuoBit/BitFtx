@@ -1,11 +1,13 @@
 // pages/admin.js
-
+import Head from "next/head";
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
-  "https://onevirzsdrfxposewozx.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk"
+  "https://onevirzsdrfxposewozx.supabase.co", // your actual URL
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk" // your actual anon key
 );
 
 export default function AdminPanel() {
@@ -91,6 +93,8 @@ export default function AdminPanel() {
   }
 
   return (
+       <>
+                  <Header />
     <div className="p-8 bg-black min-h-screen text-white">
       <h1 className="text-2xl font-bold mb-6">BitFtx Admin Panel – Airdrop Verification</h1>
 
@@ -163,5 +167,7 @@ export default function AdminPanel() {
         </table>
       </div>
     </div>
+     <Footer />
+                </>
   );
 }
