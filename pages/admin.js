@@ -47,8 +47,17 @@ export default function AdminPanel() {
   };
 
   const updateStatus = async (id, field, value) => {
-    await supabase.from("airdrop_leads").update({ [field]: value }).eq("id", id);
-    fetchLeads();
+    console.log(`Updating lead ${id} → ${field} = ${value}`);
+    const { error } = await supabase
+      .from("airdrop_leads")
+      .update({ [field]: value })
+      .eq("id", id);
+  
+    if (error) {
+      console.error("Error updating:", error);
+    } else {
+      fetchLeads(); // refresh the table
+    }
   };
 
   const handleLogin = async (e) => {
@@ -154,8 +163,9 @@ export default function AdminPanel() {
                   {['joined_twitter', 'joined_telegram', 'joined_discord', 'verified'].map((field) => (
                     <button
                       key={field}
-                      onClick={() => updateStatus(lead.id, field, !lead[field])}
-                      className="bg-purple-600 hover:bg-purple-700 text-xs px-2 py-1 rounded mr-1"
+                      onClick={() =>
+                        updateStatus(lead.id, field, !Boolean(lead[field]))
+                      }                      className="bg-purple-600 hover:bg-purple-700 text-xs px-2 py-1 rounded mr-1"
                     >
                       Toggle {field.replace("joined_", "").replace("_", " ")}
                     </button>
