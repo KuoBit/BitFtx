@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const router = useRouter();
 const [referrerCode, setReferrerCode] = useState(null);
