@@ -12,17 +12,18 @@ const supabase = createClient(
 
 export default function Login() {
   return (
-    <div className="flex justify-center items-center h-screen">
-            <>
+    <>
               <Header />
+    <div className="flex justify-center items-center h-screen">
+           
       <Auth
         supabaseClient={supabase}
         appearance={{ theme: ThemeSupa }}
         providers={['google', 'twitter']}
         theme="dark"
       />
-      <Footer />
-          </>
     </div>
+    <Footer />
+        </>
   );
 }
