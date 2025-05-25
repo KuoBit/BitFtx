@@ -20,6 +20,9 @@ const generateUserCode = () => {
   return "BFTX-" + randomHash.toUpperCase();
 };
 
+const user_code = generateUserCode();
+
+
 export default function Home() {
   const router = useRouter(); // ✅ now valid
   const [referrerCode, setReferrerCode] = useState(null);

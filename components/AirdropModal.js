@@ -6,6 +6,9 @@ const generateUserCode = () => {
   return "BFTX-" + randomHash.toUpperCase();
 };
 
+const user_code = generateUserCode();
+
+
 const AirdropModal = ({ onSubmit }) => {
   const [visible, setVisible] = useState(false);
   const [referrerCode, setReferrerCode] = useState(null);
