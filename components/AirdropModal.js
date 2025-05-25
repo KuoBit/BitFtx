@@ -13,7 +13,7 @@ export default function AirdropModal({ onSubmit }) {
   });
   const [message, setMessage] = useState(null);
 
-  const router = typeof window !== "undefined" ? useRouter() : null;
+  const router = useRouter(); // ✅ moved inside the component
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -24,10 +24,8 @@ export default function AirdropModal({ onSubmit }) {
       sessionStorage.setItem("airdrop_shown", "true");
     }
 
-    if (router) {
-      const { ref } = router.query;
-      if (ref) setReferrerCode(ref);
-    }
+    const { ref } = router.query;
+    if (ref) setReferrerCode(ref);
   }, [router]);
 
   const handleChange = (e) =>
