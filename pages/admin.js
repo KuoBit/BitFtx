@@ -149,7 +149,7 @@ export default function AdminPanel() {
                 <td className="p-2 border">{lead.twitter} {lead.joined_twitter ? "✅" : "❌"}</td>
                 <td className="p-2 border">{lead.telegram} {lead.joined_telegram ? "✅" : "❌"}</td>
                 <td className="p-2 border">{lead.discord} {lead.joined_discord ? "✅" : "❌"}</td>
-                  <td className="p-2 border">{lead.referral_code || "—"}</td>
+                  <td className="p-2 border">{lead.user_code || "—"}</td>
                   <td className="p-2 border">{lead.referrer_code || "—"}</td>
                   <td className="p-2 border">{lead.verified ? "✅" : "❌"}</td>
                   <td className="p-2 border space-y-1">
