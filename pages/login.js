@@ -14,7 +14,7 @@ export default function Login() {
   return (
     <>
               <Header />
-    <div className="flex justify-center items-center h-screen">
+              <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
            
       <Auth
         supabaseClient={supabase}
