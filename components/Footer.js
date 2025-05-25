@@ -12,7 +12,7 @@ export default function Footer() {
               <span className="sr-only">Twitter</span>
               <Image src="/icons/twitter.svg" width={24} height={24} alt="Twitter" />
             </a>
-            <a href="https://t.me/BitFtxOfficial" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition">
+            <a href="https://t.me/BitFtx" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition">
               <span className="sr-only">Telegram</span>
               <Image src="/icons/telegram.svg" width={24} height={24} alt="Telegram" />
             </a>
