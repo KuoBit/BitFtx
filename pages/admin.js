@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
-  "https://onevirzsdrfxposewozx.supabase.co", // your actual URL
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk" // your actual anon key
+  "https://onevirzsdrfxposewozx.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk"
 );
 
 export default function AdminPanel() {
@@ -47,17 +47,8 @@ export default function AdminPanel() {
   };
 
   const updateStatus = async (id, field, value) => {
-    console.log(`Updating lead ${id} → ${field} = ${value}`);
-    const { error } = await supabase
-      .from("airdrop_leads")
-      .update({ [field]: value })
-      .eq("id", id);
-  
-    if (error) {
-      console.error("Error updating:", error);
-    } else {
-      fetchLeads(); // refresh the table
-    }
+    await supabase.from("airdrop_leads").update({ [field]: value }).eq("id", id);
+    fetchLeads();
   };
 
   const handleLogin = async (e) => {
@@ -102,82 +93,83 @@ export default function AdminPanel() {
   }
 
   return (
-       <>
-                  <Header />
-    <div className="p-8 bg-black min-h-screen text-white">
-      <h1 className="text-2xl font-bold mb-6">BitFtx Admin Panel – Airdrop Verification</h1>
+    <>
+      <Header />
+      <div className="p-8 bg-black min-h-screen text-white">
+        <h1 className="text-2xl font-bold mb-6">BitFtx Admin Panel – Airdrop Verification</h1>
 
-      <div className="bg-[#1a1a1d] p-4 rounded-lg border border-white/10 mb-6">
-        <h2 className="text-xl font-semibold mb-2">🔐 Admin Section</h2>
-        <p className="text-sm text-white/70">Logged in as: {session?.user?.email}</p>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const input = prompt("Enter new admin email:");
-            if (input) addAdmin(input);
-          }}
-          className="mt-3"
-        >
-          <button type="submit" className="text-sm bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded mr-2">
-            Add New Admin
-          </button>
-          <button
-            onClick={async () => {
-              await supabase.auth.signOut();
-              setSession(null);
+        <div className="bg-[#1a1a1d] p-4 rounded-lg border border-white/10 mb-6">
+          <h2 className="text-xl font-semibold mb-2">🔐 Admin Section</h2>
+          <p className="text-sm text-white/70">Logged in as: {session?.user?.email}</p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const input = prompt("Enter new admin email:");
+              if (input) addAdmin(input);
             }}
-            className="text-sm bg-red-600 hover:bg-red-700 px-3 py-1 rounded"
+            className="mt-3"
           >
-            Logout
-          </button>
-        </form>
-      </div>
+            <button type="submit" className="text-sm bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded mr-2">
+              Add New Admin
+            </button>
+            <button
+              onClick={async () => {
+                await supabase.auth.signOut();
+                setSession(null);
+              }}
+              className="text-sm bg-red-600 hover:bg-red-700 px-3 py-1 rounded"
+            >
+              Logout
+            </button>
+          </form>
+        </div>
 
-      <div className="overflow-auto">
-        <table className="w-full text-sm border-collapse">
-          <thead>
-            <tr className="bg-gray-800">
-              <th className="p-2 border">Name</th>
-              <th className="p-2 border">Email</th>
-              <th className="p-2 border">Wallet</th>
-              <th className="p-2 border">Twitter</th>
-              <th className="p-2 border">Telegram</th>
-              <th className="p-2 border">Discord</th>
-              <th className="p-2 border">Referred By</th>
-              <th className="p-2 border">Verified</th>
-              <th className="p-2 border">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leads.map((lead) => (
-              <tr key={lead.id} className="bg-gray-900">
-                <td className="p-2 border">{lead.name}</td>
-                <td className="p-2 border">{lead.email}</td>
-                <td className="p-2 border">{lead.wallet}</td>
+        <div className="overflow-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="bg-gray-800">
+                <th className="p-2 border">Name</th>
+                <th className="p-2 border">Email</th>
+                <th className="p-2 border">Wallet</th>
+                <th className="p-2 border">Twitter</th>
+                <th className="p-2 border">Telegram</th>
+                <th className="p-2 border">Discord</th>
+                <th className="p-2 border">Referral Code</th>
+                <th className="p-2 border">Referred By</th>
+                <th className="p-2 border">Verified</th>
+                <th className="p-2 border">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leads.map((lead) => (
+                <tr key={lead.id} className="bg-gray-900">
+                  <td className="p-2 border">{lead.name}</td>
+                  <td className="p-2 border">{lead.email}</td>
+                  <td className="p-2 border">{lead.wallet}</td>
                 <td className="p-2 border">{lead.twitter} {lead.joined_twitter ? "✅" : "❌"}</td>
                 <td className="p-2 border">{lead.telegram} {lead.joined_telegram ? "✅" : "❌"}</td>
                 <td className="p-2 border">{lead.discord} {lead.joined_discord ? "✅" : "❌"}</td>
-                <td className="p-2 border">{lead.referrer_code || "—"}</td>
-                <td className="p-2 border">{lead.verified ? "✅" : "❌"}</td>
-                <td className="p-2 border space-y-1">
-                  {['joined_twitter', 'joined_telegram', 'joined_discord', 'verified'].map((field) => (
-                    <button
-                      key={field}
-                      onClick={() =>
-                        updateStatus(lead.id, field, !Boolean(lead[field]))
-                      }                      className="bg-purple-600 hover:bg-purple-700 text-xs px-2 py-1 rounded mr-1"
-                    >
-                      Toggle {field.replace("joined_", "").replace("_", " ")}
-                    </button>
-                  ))}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <td className="p-2 border">{lead.referral_code || "—"}</td>
+                  <td className="p-2 border">{lead.referrer_code || "—"}</td>
+                  <td className="p-2 border">{lead.verified ? "✅" : "❌"}</td>
+                  <td className="p-2 border space-y-1">
+                    {["joined_twitter", "joined_telegram", "joined_discord", "verified"].map((field) => (
+                      <button
+                        key={field}
+                        onClick={() => updateStatus(lead.id, field, !lead[field])}
+                        className="bg-purple-600 hover:bg-purple-700 text-xs px-2 py-1 rounded mr-1"
+                      >
+                        Toggle {field.replace("joined_", "").replace("_", " ")}
+                      </button>
+                    ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-     <Footer />
-                </>
+      <Footer />
+    </>
   );
 }
