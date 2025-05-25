@@ -1,5 +1,3 @@
-// components/AirdropModal.js
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -15,20 +13,22 @@ export default function AirdropModal({ onSubmit }) {
   });
   const [message, setMessage] = useState(null);
 
-  const router = useRouter();
+  const router = typeof window !== "undefined" ? useRouter() : null;
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const seen = sessionStorage.getItem("airdrop_shown");
     if (!seen) {
       setTimeout(() => setVisible(true), 1000);
       sessionStorage.setItem("airdrop_shown", "true");
     }
 
-    const { ref } = router.query;
-    if (ref) {
-      setReferrerCode(ref);
+    if (router) {
+      const { ref } = router.query;
+      if (ref) setReferrerCode(ref);
     }
-  }, [router.query]);
+  }, [router]);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
