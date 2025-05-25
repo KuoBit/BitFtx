@@ -1,4 +1,24 @@
 import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+const router = useRouter();
+const [referrerCode, setReferrerCode] = useState(null);
+
+useEffect(() => {
+  const seen = sessionStorage.getItem("airdrop_shown");
+  if (!seen) {
+    setTimeout(() => setVisible(true), 1000);
+    sessionStorage.setItem("airdrop_shown", "true");
+  }
+
+  // Extract referral code from URL
+  const { ref } = router.query;
+  if (ref) {
+    setReferrerCode(ref);
+  }
+}, [router.query]);
+
 
 export default function AirdropModal({ onSubmit }) {
   const [visible, setVisible] = useState(false);
@@ -24,7 +44,7 @@ export default function AirdropModal({ onSubmit }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { error } = await onSubmit(formData);
+    const { error } = await onSubmit({ ...formData, referrer_code: referrerCode });
     if (error) {
       setMessage("❌ Error saving your submission.");
     } else {

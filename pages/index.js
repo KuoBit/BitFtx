@@ -5,7 +5,17 @@ import Image from "next/image";
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
+import { useRouter } from 'next/router';
 
+const router = useRouter();
+const [referrerCode, setReferrerCode] = useState(null);
+
+useEffect(() => {
+  const { ref } = router.query;
+  if (ref) {
+    setReferrerCode(ref);
+  }
+}, [router.query]);
 
 const supabase = createClient(
   "https://onevirzsdrfxposewozx.supabase.co", // your actual URL
@@ -60,6 +70,7 @@ export default function Home() {
         wallet: formData.wallet,
         twitter: formData.twitter,
         telegram: formData.telegram,
+        referrer_code: referrerCode || null,
       },
     ]);
     if (error) {
