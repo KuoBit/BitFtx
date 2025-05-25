@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
+const generateUserCode = () => {
+  const randomHash = Math.random().toString(36).substring(2, 10); // 8-char base36
+  return "BFTX-" + randomHash.toUpperCase();
+};
+
 const AirdropModal = ({ onSubmit }) => {
   const [visible, setVisible] = useState(false);
   const [referrerCode, setReferrerCode] = useState(null);
@@ -32,7 +37,7 @@ const AirdropModal = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { error } = await onSubmit({ ...formData, referrer_code: referrerCode });
+    const { error } = await onSubmit({ ...formData, user_code, referrer_code: referrerCode });
     if (error) {
       setMessage("❌ Error saving your submission.");
     } else {

@@ -15,6 +15,11 @@ const supabase = createClient(
 const contractAddress = "0x42E6a5e559169b4cc5DEeB748795aE5F1970B221";
 const symbol = "BFTX";
 
+const generateUserCode = () => {
+  const randomHash = Math.random().toString(36).substring(2, 10); // 8-char base36
+  return "BFTX-" + randomHash.toUpperCase();
+};
+
 export default function Home() {
   const router = useRouter(); // ✅ now valid
   const [referrerCode, setReferrerCode] = useState(null);
@@ -68,6 +73,7 @@ export default function Home() {
         wallet: formData.wallet,
         twitter: formData.twitter,
         telegram: formData.telegram,
+        user_code,
         referrer_code: referrerCode || null,
       },
     ]);
