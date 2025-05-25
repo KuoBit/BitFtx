@@ -1,26 +1,11 @@
+// components/AirdropModal.js
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-const router = useRouter();
-const [referrerCode, setReferrerCode] = useState(null);
-
-useEffect(() => {
-  const seen = sessionStorage.getItem("airdrop_shown");
-  if (!seen) {
-    setTimeout(() => setVisible(true), 1000);
-    sessionStorage.setItem("airdrop_shown", "true");
-  }
-
-  // Extract referral code from URL
-  const { ref } = router.query;
-  if (ref) {
-    setReferrerCode(ref);
-  }
-}, [router.query]);
-
-
 export default function AirdropModal({ onSubmit }) {
   const [visible, setVisible] = useState(false);
+  const [referrerCode, setReferrerCode] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,13 +15,20 @@ export default function AirdropModal({ onSubmit }) {
   });
   const [message, setMessage] = useState(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     const seen = sessionStorage.getItem("airdrop_shown");
     if (!seen) {
-      setTimeout(() => setVisible(true), 1000); // 1s delay
+      setTimeout(() => setVisible(true), 1000);
       sessionStorage.setItem("airdrop_shown", "true");
     }
-  }, []);
+
+    const { ref } = router.query;
+    if (ref) {
+      setReferrerCode(ref);
+    }
+  }, [router.query]);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
