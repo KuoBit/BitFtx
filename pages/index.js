@@ -2,30 +2,22 @@
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useRouter } from 'next/router';
 
-const router = useRouter();
-const [referrerCode, setReferrerCode] = useState(null);
-
-useEffect(() => {
-  const { ref } = router.query;
-  if (ref) {
-    setReferrerCode(ref);
-  }
-}, [router.query]);
-
 const supabase = createClient(
-  "https://onevirzsdrfxposewozx.supabase.co", // your actual URL
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk" // your actual anon key
+  "https://onevirzsdrfxposewozx.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 );
 
 const contractAddress = "0x42E6a5e559169b4cc5DEeB748795aE5F1970B221";
 const symbol = "BFTX";
 
 export default function Home() {
+  const router = useRouter(); // ✅ now valid
+  const [referrerCode, setReferrerCode] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,9 +25,15 @@ export default function Home() {
     twitter: "",
     telegram: "",
   });
-  
   const [message, setMessage] = useState(null);
-  
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { ref } = router.query;
+      if (ref) setReferrerCode(ref);
+    }
+  }, [router.isReady, router.query]);
+
   const addTokenToWallet = () => {
     if (typeof window !== "undefined" && window.ethereum) {
       try {
@@ -60,7 +58,7 @@ export default function Home() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { error } = await supabase.from("airdrop_leads").insert([
@@ -77,9 +75,9 @@ export default function Home() {
       setMessage("❌ Error saving your submission.");
     } else {
       setMessage("✅ You're in! Thanks for joining the airdrop.");
-      setFormData({ wallet: "", email: "", twitter: "", telegram: "" });
+      setFormData({ name: "", wallet: "", email: "", twitter: "", telegram: "" });
     }
-  };  
+  };
   return (
     <div className="bg-[#0b0b0c] text-white min-h-screen font-sans">
             <Head>
