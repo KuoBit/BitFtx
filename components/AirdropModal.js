@@ -6,9 +6,6 @@ const generateUserCode = () => {
   return "BFTX-" + randomHash.toUpperCase();
 };
 
-const user_code = generateUserCode();
-
-
 const AirdropModal = ({ onSubmit }) => {
   const [visible, setVisible] = useState(false);
   const [referrerCode, setReferrerCode] = useState(null);
@@ -40,6 +37,7 @@ const AirdropModal = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const user_code = generateUserCode();
     const { error } = await onSubmit({ ...formData, user_code, referrer_code: referrerCode });
     if (error) {
       setMessage("❌ Error saving your submission.");
