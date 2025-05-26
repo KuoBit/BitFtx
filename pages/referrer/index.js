@@ -17,10 +17,17 @@ export default function ReferrerDashboard() {
   const [referrals, setReferrals] = useState([]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) router.push('/');
-      setSession(data.session);
-    });
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        // Wait briefly and retry (some redirects need time)
+        setTimeout(checkSession, 500);
+      } else {
+        setSession(session);
+      }
+    };
+  
+    checkSession();
   }, []);
 
   useEffect(() => {

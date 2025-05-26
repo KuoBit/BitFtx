@@ -25,6 +25,19 @@ export default function App({ Component, pageProps }) {
     }
   }, []);
 
+  // 🔐 Restore Supabase session after redirect (magic link)
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN") {
+        console.log("User signed in via magic link", session);
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
   const submitAirdrop = async (formData) => {
     return await supabase.from("airdrop_leads").insert([formData]);
   };
@@ -36,7 +49,7 @@ export default function App({ Component, pageProps }) {
         strategy="afterInteractive"
         src="https://www.googletagmanager.com/gtag/js?id=G-GZ4N5DCXE1"
       />
-      
+
       {/* Airdrop Popup shown once per session */}
       <AirdropModal onSubmit={submitAirdrop} />
 
