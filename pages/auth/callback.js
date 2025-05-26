@@ -14,12 +14,11 @@ const supabase = createClient(
   
     useEffect(() => {
       const completeSignIn = async () => {
-        const { error } = await supabase.auth.getSessionFromUrl(); // ✅ For magic links
+        const { error } = await supabase.auth.getSessionFromUrl(); // ✅ for magic link
         if (error) {
           console.error("Error restoring session:", error.message);
         } else {
-          console.log("Session restored");
-          router.replace("/referrer"); // ✅ Go to dashboard
+          router.replace("/referrer");
         }
         setLoading(false);
       };
@@ -32,4 +31,9 @@ const supabase = createClient(
         <p className="text-lg">{loading ? "Redirecting..." : "Failed to sign in"}</p>
       </div>
     );
+  }
+  
+  // 🔐 This disables static pre-rendering and ensures it's only run on client
+  export async function getServerSideProps() {
+    return { props: {} };
   }
