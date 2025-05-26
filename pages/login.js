@@ -21,6 +21,7 @@ export default function Login() {
         appearance={{ theme: ThemeSupa }}
         providers={['google', 'twitter']}
         theme="dark"
+        redirectTo="https://www.bitftx.com/auth/callback" 
       />
     </div>
     <Footer />
