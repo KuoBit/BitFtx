@@ -4,36 +4,49 @@ import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
-    "https://onevirzsdrfxposewozx.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk"
-  );
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
-  export default function AuthCallback() {
-    const router = useRouter();
-    const [loading, setLoading] = useState(true);
-  
-    useEffect(() => {
-      const completeSignIn = async () => {
-        const { error } = await supabase.auth.getSessionFromUrl(); // ✅ for magic link
-        if (error) {
-          console.error("Error restoring session:", error.message);
-        } else {
-          router.replace("/referrer");
-        }
+export default function AuthCallback() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const restoreSession = async () => {
+      const email = localStorage.getItem("bftx-login-email");
+      if (!email) {
+        console.error("No stored email found for session restore.");
         setLoading(false);
-      };
-  
-      completeSignIn();
-    }, []);
-  
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-lg">{loading ? "Redirecting..." : "Failed to sign in"}</p>
-      </div>
-    );
-  }
-  
-  // 🔐 This disables static pre-rendering and ensures it's only run on client
-  export async function getServerSideProps() {
-    return { props: {} };
-  }
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: false }
+      });
+
+      if (error) {
+        console.error("Failed to restore session:", error.message);
+      } else {
+        console.log("Session restored, redirecting...");
+        router.replace("/referrer");
+      }
+      setLoading(false);
+    };
+
+    restoreSession();
+  }, []);
+
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <p className="text-white text-lg">
+        {loading ? "Restoring session, please wait..." : "Session could not be restored."}
+      </p>
+    </div>
+  );
+}
+
+export async function getServerSideProps() {
+  return { props: {} };
+}

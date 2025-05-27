@@ -31,6 +31,14 @@ export default function App({ Component, pageProps }) {
       if (event === "SIGNED_IN") {
         console.log("User signed in via magic link", session);
       }
+
+      if (event === "PASSWORDLESS_EMAIL_SENT") {
+        const emailInput = document.querySelector("input[type='email']");
+        if (emailInput && emailInput.value) {
+          localStorage.setItem("bftx-login-email", emailInput.value);
+          console.log("📥 Stored email for session restore:", emailInput.value);
+        }
+      }
     });
 
     return () => {
