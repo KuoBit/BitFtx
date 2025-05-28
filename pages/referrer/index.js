@@ -55,6 +55,8 @@ export default function ReferrerDashboard() {
   if (!userData) return <div className="p-10 text-center">Loading...</div>;
 
   return (
+      <>
+          <Header />
     <div className="max-w-4xl mx-auto py-12 px-4">
       <h1 className="text-3xl font-bold mb-6">Referral Dashboard</h1>
 
@@ -113,5 +115,7 @@ export default function ReferrerDashboard() {
         </CardContent>
       </Card>
     </div>
+     <Footer />
+        </>
   );
 }
