@@ -10,7 +10,7 @@ import Footer from '@/components/Footer';
 const supabase = createClient(
     "https://onevirzsdrfxposewozx.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk"
-  );
+);
 
 export default function ReferrerDashboard() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function ReferrerDashboard() {
         setSession(session);
       }
     };
-  
+
     checkSession();
   }, []);
 
@@ -54,70 +54,69 @@ export default function ReferrerDashboard() {
     fetchData();
   }, [session]);
 
-  if (!userData) return <div className="p-10 text-center">Loading...</div>;
+  if (!userData) return <div className="p-10 text-center text-white">Loading...</div>;
 
   return (
-      <>
-          <Header />
-    <div className="max-w-4xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold mb-6">Referral Dashboard</h1>
+    <>
+      <Header />
+      <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6">Referral Dashboard</h1>
 
-      <Card className="mb-8">
-        <CardContent className="p-6 space-y-3">
-          <p><strong>Your Code:</strong> {userData.user_code}</p>
-          <p>
-            <strong>Your Referral Link:</strong> <br />
-            <span className="break-all text-blue-600">https://bitftx.com/?ref={userData.user_code}</span>
-          </p>
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(`https://bitftx.com/?ref=${userData.user_code}`);
-              alert('Referral link copied!');
-            }}
-          >Copy Link</Button>
-        </CardContent>
-      </Card>
+          <div className="bg-[#1a1a1c] border border-gray-800 rounded-xl p-6 mb-8">
+            <p><strong>Your Code:</strong> {userData.user_code}</p>
+            <p>
+              <strong>Your Referral Link:</strong><br />
+              <span className="break-all text-blue-400 underline cursor-pointer" onClick={() => window.open(`https://bitftx.com/?ref=${userData.user_code}`, '_blank')}>https://bitftx.com/?ref={userData.user_code}</span>
+            </p>
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(`https://bitftx.com/?ref=${userData.user_code}`);
+                alert('Referral link copied!');
+              }}
+              className="mt-4"
+            >Copy Link</Button>
+          </div>
 
-      <Card className="mb-8">
-        <CardContent className="p-6 space-y-3">
-          <h2 className="text-xl font-semibold mb-4">Your Progress</h2>
-          <ul className="list-disc list-inside">
-            <li>Telegram: {userData.joined_telegram ? '✅ Joined' : '❌ Not Joined'}</li>
-            <li>Discord: {userData.joined_discord ? '✅ Joined' : '❌ Not Joined'}</li>
-            <li>X (Twitter): {userData.joined_twitter ? '✅ Joined' : '❌ Not Joined'}</li>
-          </ul>
-        </CardContent>
-      </Card>
+          <div className="bg-[#1a1a1c] border border-gray-800 rounded-xl p-6 mb-8">
+            <h2 className="text-xl font-semibold mb-4">Your Progress</h2>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Telegram: {userData.joined_telegram ? '✅ Joined' : '❌ Not Joined'}</li>
+              <li>Discord: {userData.joined_discord ? '✅ Joined' : '❌ Not Joined'}</li>
+              <li>X (Twitter): {userData.joined_twitter ? '✅ Joined' : '❌ Not Joined'}</li>
+            </ul>
+          </div>
 
-      <Card>
-        <CardContent className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Your Referrals</h2>
-          <table className="w-full table-auto text-sm">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="px-4 py-2 text-left">Name</th>
-                <th className="px-4 py-2">Telegram</th>
-                <th className="px-4 py-2">Discord</th>
-                <th className="px-4 py-2">X</th>
-                <th className="px-4 py-2">Tokens</th>
-              </tr>
-            </thead>
-            <tbody>
-              {referrals.map((r, idx) => (
-                <tr key={idx} className="border-t">
-                  <td className="px-4 py-2">{r.name}</td>
-                  <td className="text-center">{r.joined_telegram ? '✅' : '❌'}</td>
-                  <td className="text-center">{r.joined_discord ? '✅' : '❌'}</td>
-                  <td className="text-center">{r.joined_twitter ? '✅' : '❌'}</td>
-                  <td className="text-center">{r.tokens_earned || 0}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
-    </div>
-     <Footer />
-        </>
+          <div className="bg-[#1a1a1c] border border-gray-800 rounded-xl p-6">
+            <h2 className="text-xl font-semibold mb-4">Your Referrals</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full table-auto text-sm">
+                <thead>
+                  <tr className="bg-[#2a2a2c] text-white">
+                    <th className="px-4 py-2 text-left">Name</th>
+                    <th className="px-4 py-2">Telegram</th>
+                    <th className="px-4 py-2">Discord</th>
+                    <th className="px-4 py-2">X</th>
+                    <th className="px-4 py-2">Tokens</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {referrals.map((r, idx) => (
+                    <tr key={idx} className="border-t border-gray-700">
+                      <td className="px-4 py-2">{r.name}</td>
+                      <td className="text-center">{r.joined_telegram ? '✅' : '❌'}</td>
+                      <td className="text-center">{r.joined_discord ? '✅' : '❌'}</td>
+                      <td className="text-center">{r.joined_twitter ? '✅' : '❌'}</td>
+                      <td className="text-center">{r.tokens_earned || 0}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
   );
 }
