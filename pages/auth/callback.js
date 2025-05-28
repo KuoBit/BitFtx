@@ -13,35 +13,26 @@ export default function AuthCallback() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const restoreSession = async () => {
-      const email = localStorage.getItem("bftx-login-email");
-      if (!email) {
-        console.error("No stored email found for session restore.");
-        setLoading(false);
-        return;
-      }
+    const checkSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
 
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: { shouldCreateUser: false }
-      });
-
-      if (error) {
-        console.error("Failed to restore session:", error.message);
-      } else {
-        console.log("Session restored, redirecting...");
+      if (session) {
+        console.log("✅ Session found. Redirecting to /referrer...");
         router.replace("/referrer");
+      } else {
+        console.warn("❌ No session found. Stuck at auth callback.");
       }
+
       setLoading(false);
     };
 
-    restoreSession();
+    checkSession();
   }, []);
 
   return (
     <div className="flex justify-center items-center h-screen">
       <p className="text-white text-lg">
-        {loading ? "Restoring session, please wait..." : "Session could not be restored."}
+        {loading ? "Redirecting to your dashboard..." : "Unable to sign you in."}
       </p>
     </div>
   );
