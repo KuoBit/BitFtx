@@ -64,9 +64,10 @@ export default function AirdropCampaignAdmin() {
     const { name, value, type, checked } = e.target;
     setForm({
       ...form,
-      [name]: type === "checkbox" ? checked : parseInt(value),
+      [name]: type === "checkbox" ? checked : type === "number" ? parseInt(value) : value,
     });
   };
+  
 
   const handleSubmit = async () => {
     const payload = { ...form };
