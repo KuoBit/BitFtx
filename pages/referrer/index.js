@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 const supabase = createClient(
   "https://onevirzsdrfxposewozx.supabase.co",
@@ -18,6 +19,7 @@ export default function ReferrerDashboard() {
   const [userData, setUserData] = useState(null);
   const [referrals, setReferrals] = useState([]);
   const [campaign, setCampaign] = useState(null);
+  const [totalTokens, setTotalTokens] = useState(0);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -56,6 +58,20 @@ export default function ReferrerDashboard() {
         .limit(1)
         .single();
       setCampaign(campaignData);
+
+      if (campaignData) {
+        let tokens = campaignData.signup_tokens || 0;
+        if (userRow.joined_twitter) tokens += campaignData.task_tokens;
+        if (userRow.joined_telegram) tokens += campaignData.task_tokens;
+        if (userRow.joined_discord) tokens += campaignData.task_tokens;
+        if (
+          userRow.referrer_code &&
+          (userRow.joined_twitter || userRow.joined_telegram || userRow.joined_discord)
+        ) {
+          tokens += campaignData.referee_bonus || 0;
+        }
+        setTotalTokens(tokens);
+      }
     };
 
     fetchData();
@@ -68,7 +84,10 @@ export default function ReferrerDashboard() {
       <Header />
       <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Referral Dashboard</h1>
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold">Referral Dashboard</h1>
+            <Link href="/referrer/profile" className="text-sm text-blue-400 underline">Edit Profile</Link>
+          </div>
 
           {campaign && (
             <div className="bg-[#1a1a1c] border border-gray-800 rounded-xl p-6 mb-8">
@@ -83,10 +102,10 @@ export default function ReferrerDashboard() {
                 <a href="https://twitter.com/BitFtxOfficial" target="_blank" rel="noopener noreferrer">
                   <Button>Join Twitter</Button>
                 </a>
-                <a href="https://t.me/BitFtxOfficial" target="_blank" rel="noopener noreferrer">
+                <a href="https://t.me/BitFtx" target="_blank" rel="noopener noreferrer">
                   <Button>Join Telegram</Button>
                 </a>
-                <a href="https://discord.gg/bitftx" target="_blank" rel="noopener noreferrer">
+                <a href="https://discord.gg/4E5PuAKn" target="_blank" rel="noopener noreferrer">
                   <Button>Join Discord</Button>
                 </a>
               </div>
@@ -116,6 +135,7 @@ export default function ReferrerDashboard() {
               <li>Telegram: {userData.joined_telegram ? '✅ Joined' : '❌ Not Joined'}</li>
               <li>Discord: {userData.joined_discord ? '✅ Joined' : '❌ Not Joined'}</li>
               <li>X (Twitter): {userData.joined_twitter ? '✅ Joined' : '❌ Not Joined'}</li>
+              <li><strong>Total Tokens Earned:</strong> {totalTokens}</li>
             </ul>
           </div>
 
