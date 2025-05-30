@@ -20,7 +20,7 @@ export default function Login() {
         supabaseClient={supabase}
         appearance={{ theme: ThemeSupa }}
         providers={['google', 'twitter']}
-        theme="dark"
+        theme="light"
         redirectTo="https://www.bitftx.com/auth/callback" 
       />
     </div>
