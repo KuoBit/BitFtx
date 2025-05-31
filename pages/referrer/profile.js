@@ -53,8 +53,24 @@ export default function Profile() {
   };
 
   const handleUpdate = async () => {
-    await supabase.from('airdrop_leads').update(form).eq('email', session.user.email);
-    alert('Profile updated successfully!');
+    const updates = {
+      wallet: form.wallet,
+      telegram: form.telegram,
+      twitter: form.twitter,
+      discord: form.discord,
+    };
+
+    const { error } = await supabase
+      .from('airdrop_leads')
+      .update(updates)
+      .eq('email', session.user.email);
+
+    if (error) {
+      console.error(error);
+      alert('Failed to update profile.');
+    } else {
+      alert('Profile updated successfully!');
+    }
   };
 
   const requestWithdrawal = async () => {
@@ -67,6 +83,15 @@ export default function Profile() {
       <Header />
       <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6 font-sans">
         <div className="max-w-2xl mx-auto">
+          <div className="mb-4 text-right">
+            <Button
+              onClick={() => window.location.href = '/referrer'}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              Go to Referral Dashboard →
+            </Button>
+          </div>
+
           <h1 className="text-3xl font-bold mb-6">Your Profile</h1>
 
           <div className="space-y-4 bg-[#1a1a1c] border border-gray-800 p-6 rounded-xl">
@@ -117,7 +142,9 @@ export default function Profile() {
             <div className="mt-8 bg-[#1a1a1c] border border-gray-800 p-6 rounded-xl">
               <h2 className="text-xl font-semibold mb-4">Your Token Balance</h2>
               <p className="text-2xl font-bold">{userData.tokens_earned || 0} BFTX</p>
-              <Button onClick={requestWithdrawal} className="mt-4 bg-green-600 hover:bg-green-700">Request Withdrawal</Button>
+              <Button onClick={requestWithdrawal} className="mt-4 bg-green-600 hover:bg-green-700">
+                Request Withdrawal
+              </Button>
             </div>
           )}
         </div>
