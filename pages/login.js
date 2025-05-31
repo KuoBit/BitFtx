@@ -20,7 +20,6 @@ const supabase = createClient(
   
             <Auth
               supabaseClient={supabase}
-              providers={['google', 'twitter']}
               redirectTo="https://www.bitftx.com/auth/callback"
               appearance={{
                 theme: ThemeSupa,
