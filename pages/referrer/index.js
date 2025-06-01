@@ -1,16 +1,15 @@
-// pages/referrer/index.js
+// Updated Referrer Dashboard to reflect actual tokens from transaction table
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/router';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 const supabase = createClient(
-  "https://onevirzsdrfxposewozx.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk"
+  'https://onevirzsdrfxposewozx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
 );
 
 export default function ReferrerDashboard() {
@@ -59,19 +58,12 @@ export default function ReferrerDashboard() {
         .single();
       setCampaign(campaignData);
 
-      if (campaignData) {
-        let tokens = campaignData.signup_tokens || 0;
-        if (userRow.joined_twitter) tokens += campaignData.task_tokens;
-        if (userRow.joined_telegram) tokens += campaignData.task_tokens;
-        if (userRow.joined_discord) tokens += campaignData.task_tokens;
-        if (
-          userRow.referrer_code &&
-          (userRow.joined_twitter || userRow.joined_telegram || userRow.joined_discord)
-        ) {
-          tokens += campaignData.referee_bonus || 0;
-        }
-        setTotalTokens(tokens);
-      }
+      const { data: tokensResult } = await supabase
+        .from('token_transactions')
+        .select('amount')
+        .eq('email', userRow.email);
+      const total = (tokensResult || []).reduce((sum, row) => sum + (row.amount || 0), 0);
+      setTotalTokens(total);
     };
 
     fetchData();
@@ -149,7 +141,6 @@ export default function ReferrerDashboard() {
                     <th className="px-4 py-2">Telegram</th>
                     <th className="px-4 py-2">Discord</th>
                     <th className="px-4 py-2">X</th>
-                    <th className="px-4 py-2">Tokens</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -159,7 +150,6 @@ export default function ReferrerDashboard() {
                       <td className="text-center">{r.joined_telegram ? '✅' : '❌'}</td>
                       <td className="text-center">{r.joined_discord ? '✅' : '❌'}</td>
                       <td className="text-center">{r.joined_twitter ? '✅' : '❌'}</td>
-                      <td className="text-center">{r.tokens_earned || 0}</td>
                     </tr>
                   ))}
                 </tbody>
