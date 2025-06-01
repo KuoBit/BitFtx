@@ -46,7 +46,7 @@ export default function ReferrerDashboard() {
       const { data: referralsList } = await supabase
         .from('airdrop_leads')
         .select('*')
-        .eq('referrer_code', userRow.user_code);
+        .ilike('referrer_code', userRow.user_code);
       setReferrals(referralsList || []);
 
       const { data: campaignData } = await supabase
