@@ -19,6 +19,8 @@ export default function Profile() {
     discord: '',
     twitter: ''
   });
+  const [tokenBalance, setTokenBalance] = useState(0);
+  const [withdrawnTokens, setWithdrawnTokens] = useState(0);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -31,19 +33,30 @@ export default function Profile() {
   useEffect(() => {
     if (!session) return;
     const fetchUser = async () => {
-      const { data } = await supabase
+      const { data: userRow } = await supabase
         .from('airdrop_leads')
         .select('*')
         .eq('email', session.user.email)
         .single();
 
-      setUserData(data);
+      setUserData(userRow);
       setForm({
-        wallet: data.wallet || '',
-        telegram: data.telegram || '',
-        discord: data.discord || '',
-        twitter: data.twitter || ''
+        wallet: userRow.wallet || '',
+        telegram: userRow.telegram || '',
+        discord: userRow.discord || '',
+        twitter: userRow.twitter || ''
       });
+
+      const { data: txns } = await supabase
+        .from('token_transactions')
+        .select('amount')
+        .eq('email', session.user.email);
+
+      const total = (txns || []).reduce((sum, row) => sum + (row.amount || 0), 0);
+      const withdrawn = (txns || []).filter(tx => tx.amount < 0).reduce((sum, tx) => sum + tx.amount, 0);
+
+      setTokenBalance(total);
+      setWithdrawnTokens(-withdrawn); // convert to positive number
     };
     fetchUser();
   }, [session]);
@@ -74,8 +87,16 @@ export default function Profile() {
   };
 
   const requestWithdrawal = async () => {
-    await supabase.from('withdrawal_requests').insert([{ email: session.user.email }]);
-    alert('Withdrawal request submitted!');
+    const { error } = await supabase
+      .from('withdrawal_requests')
+      .insert([{ email: session.user.email, status: 'pending', tokens: tokenBalance }]);
+
+    if (error) {
+      console.error(error);
+      alert('Failed to submit withdrawal request.');
+    } else {
+      alert('Withdrawal request submitted!');
+    }
   };
 
   return (
@@ -138,15 +159,14 @@ export default function Profile() {
             <Button onClick={handleUpdate} className="mt-4">Update Profile</Button>
           </div>
 
-          {userData && (
-            <div className="mt-8 bg-[#1a1a1c] border border-gray-800 p-6 rounded-xl">
-              <h2 className="text-xl font-semibold mb-4">Your Token Balance</h2>
-              <p className="text-2xl font-bold">{userData.tokens_earned || 0} BFTX</p>
-              <Button onClick={requestWithdrawal} className="mt-4 bg-green-600 hover:bg-green-700">
-                Request Withdrawal
-              </Button>
-            </div>
-          )}
+          <div className="mt-8 bg-[#1a1a1c] border border-gray-800 p-6 rounded-xl">
+            <h2 className="text-xl font-semibold mb-4">Your Token Balance</h2>
+            <p className="text-2xl font-bold">{tokenBalance} BFTX</p>
+            <p className="mt-1 text-sm text-gray-400">Withdrawn: {withdrawnTokens} BFTX</p>
+            <Button onClick={requestWithdrawal} className="mt-4 bg-green-600 hover:bg-green-700">
+              Request Withdrawal
+            </Button>
+          </div>
         </div>
       </div>
       <Footer />
