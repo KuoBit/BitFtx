@@ -53,10 +53,10 @@ export default function Profile() {
         .eq('email', session.user.email);
 
       const total = (txns || []).reduce((sum, row) => sum + (row.amount || 0), 0);
-      const withdrawn = (txns || []).filter(tx => tx.amount < 0).reduce((sum, tx) => sum + tx.amount, 0);
+      const withdrawn = (txns || []).filter(tx => tx.amount < 0).reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
 
-      setTokenBalance(total);
-      setWithdrawnTokens(-withdrawn); // convert to positive number
+      setTokenBalance(total - withdrawn);
+      setWithdrawnTokens(withdrawn);
     };
     fetchUser();
   }, [session]);
