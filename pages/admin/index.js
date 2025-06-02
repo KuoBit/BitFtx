@@ -17,7 +17,7 @@ export default function AdminHome() {
             <Link href="/admin/airdrop-campaign" className="block bg-[#1a1a1c] p-4 rounded border border-gray-700 hover:bg-[#222]">
               🎯 Manage Airdrop Campaigns
             </Link>
-            <Link href="/admin/airdrop-campaign" className="block bg-[#1a1a1c] p-4 rounded border border-gray-700 hover:bg-[#222]">
+            <Link href="/admin/withdrawals" className="block bg-[#1a1a1c] p-4 rounded border border-gray-700 hover:bg-[#222]">
               Withdrawals Request
             </Link>
             {/* Add more admin links here as needed */}

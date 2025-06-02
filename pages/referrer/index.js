@@ -78,9 +78,9 @@ export default function ReferrerDashboard() {
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold">Referral Dashboard</h1>
-            <Link href="/referrer/profile" className="text-sm text-blue-400 underline">Edit Profile</Link>
+            <Link href="/referrer/profile" className="text-sm text-blue-400 underline">Withdraw BFTX / Edit Profile</Link>
           </div>
-
+          
           {campaign && (
             <div className="bg-[#1a1a1c] border border-gray-800 rounded-xl p-6 mb-8">
               <h2 className="text-xl font-semibold mb-2">🎁 Airdrop Campaign: {campaign.name}</h2>

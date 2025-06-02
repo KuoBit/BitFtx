@@ -52,10 +52,16 @@ export default function Profile() {
         .select('amount')
         .eq('email', session.user.email);
 
-      const total = (txns || []).reduce((sum, row) => sum + (row.amount || 0), 0);
-      const withdrawn = (txns || []).filter(tx => tx.amount < 0).reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+      const { data: withdrawals } = await supabase
+        .from('withdrawal_requests')
+        .select('tokens')
+        .eq('email', session.user.email)
+        .eq('status', 'approved');
 
-      setTokenBalance(total - withdrawn);
+      const totalEarned = (txns || []).reduce((sum, row) => sum + (row.amount || 0), 0);
+      const withdrawn = (withdrawals || []).reduce((sum, row) => sum + (row.tokens || 0), 0);
+
+      setTokenBalance(totalEarned - withdrawn);
       setWithdrawnTokens(withdrawn);
     };
     fetchUser();
