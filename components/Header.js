@@ -62,6 +62,7 @@ export default function Header() {
         <button onClick={() => handleScroll("roadmap")} className="hover:text-white">Roadmap</button>
         <button onClick={() => handleScroll("airdrop")} className="hover:text-white">Airdrop</button>
         <Link href="/blog" className="hover:text-white font-medium text-purple-400">Blog</Link>
+        <Link href="/login" className="hover:text-white font-medium text-purple-400"><b>Login</b></Link>
       </nav>
     </header>
   );

@@ -129,6 +129,7 @@ export default function Home() {
     <a href="#roadmap" className="hover:text-white">Roadmap</a>
     <a href="#airdrop" className="hover:text-white">Airdrop</a>
     <a href="/blog" className="hover:text-white font-medium text-purple-400">Blog</a>
+    <Link href="/login" className="hover:text-white font-medium text-purple-400"><b>Login</b></Link>
   </nav>
 </header>
 
