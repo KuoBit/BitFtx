@@ -42,6 +42,14 @@ const AirdropModal = ({ onSubmit }) => {
     if (error) {
       setMessage("❌ Error saving your submission.");
     } else {
+          // ✅ FIRE GA EVENT
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "airdrop_submit", {
+        event_category: "Airdrop",
+        event_label: referrerCode || "organic",
+        value: 1,
+      });
+    }
       setMessage("✅ You're in! Thanks for joining the airdrop.");
       setFormData({
         name: "",
