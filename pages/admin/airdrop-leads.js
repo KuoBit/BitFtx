@@ -118,8 +118,10 @@ export default function AirdropLeadsPage() {
   return (
     <>
       <Header />
-      <AdminHeader />
-      <div className="p-8 bg-black min-h-screen text-white">
+      <div className="mt-4">
+    <AdminHeader />
+  </div>
+        <div className="p-8 bg-black min-h-screen text-white">
         <h1 className="text-2xl font-bold mb-6">BitFtx Admin Panel – Airdrop Verification</h1>
 
         <div className="bg-[#1a1a1d] p-4 rounded-lg border border-white/10 mb-6">

@@ -67,7 +67,9 @@ export default function WithdrawalRequests() {
   return (
     <>
       <Header />
-      <AdminHeader />
+      <div className="mt-4">
+    <AdminHeader />
+  </div>
       <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Withdrawal Requests</h1>
