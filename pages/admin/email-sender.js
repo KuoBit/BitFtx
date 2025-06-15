@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
 import Header from "@/components/Header";
-import AdminHeader from "@/components/AdminHeader";
 import Footer from "@/components/Footer";
 import EmailSender from "@/components/EmailSender";
 
@@ -33,9 +32,6 @@ export default function EmailSenderPage() {
   return (
     <>
       <Header />
-      <div className="mt-4">
-    <AdminHeader />
-  </div>
       <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">📧 Send Promotional Emails</h1>

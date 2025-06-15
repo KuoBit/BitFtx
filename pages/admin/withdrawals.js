@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { createClient } from '@supabase/supabase-js';
 import Header from '@/components/Header';
-import AdminHeader from "@/components/AdminHeader";
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 
@@ -67,9 +66,6 @@ export default function WithdrawalRequests() {
   return (
     <>
       <Header />
-      <div className="mt-4">
-    <AdminHeader />
-  </div>
       <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Withdrawal Requests</h1>
