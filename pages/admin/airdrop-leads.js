@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Header from '@/components/Header';
-import Header from '@/components/Admin-Header';
+import AdminHeader from "@/components/AdminHeader";
 import Footer from '@/components/Footer';
 
 const supabase = createClient(
@@ -118,7 +118,7 @@ export default function AirdropLeadsPage() {
   return (
     <>
       <Header />
-      <Admin-Header />
+      <AdminHeader />
       <div className="p-8 bg-black min-h-screen text-white">
         <h1 className="text-2xl font-bold mb-6">BitFtx Admin Panel – Airdrop Verification</h1>
 

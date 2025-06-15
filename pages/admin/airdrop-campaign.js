@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
 import Header from "@/components/Header";
-import Header from "@/components/Admin-Header";
+import AdminHeader from "@/components/AdminHeader";
 import Footer from "@/components/Footer";
 
 const supabase = createClient(
@@ -83,7 +83,7 @@ export default function AirdropCampaignAdmin() {
   return (
     <>
       <Header />
-      <Admin-Header />
+      <AdminHeader />
       <div className="bg-[#0b0b0c] text-white min-h-screen py-20 px-6">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Airdrop Campaign Settings</h1>
