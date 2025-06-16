@@ -1,4 +1,3 @@
-// Updated admin panel logic with token transaction tracking
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Header from '@/components/Header';
@@ -43,12 +42,37 @@ export default function AirdropLeadsPage() {
   };
 
   const fetchLeads = async () => {
-    const { data } = await supabase.from('airdrop_leads').select('*').order('created_at', { ascending: false });
-    if (data) setLeads(data);
+    const { data: leadsData } = await supabase
+      .from('airdrop_leads')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    const { data: txsData } = await supabase
+      .from('token_transactions')
+      .select('email, amount');
+
+    const balances = {};
+    for (const tx of txsData) {
+      if (!balances[tx.email]) balances[tx.email] = 0;
+      balances[tx.email] += tx.amount;
+    }
+
+    const enrichedLeads = leadsData.map(lead => ({
+      ...lead,
+      token_balance: balances[lead.email] || 0
+    }));
+
+    setLeads(enrichedLeads);
   };
 
   const fetchCampaign = async () => {
-    const { data } = await supabase.from('airdrop_campaigns').select('*').eq('is_active', true).order('created_at', { ascending: false }).limit(1).single();
+    const { data } = await supabase
+      .from('airdrop_campaigns')
+      .select('*')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
     setCampaign(data);
   };
 
@@ -74,7 +98,12 @@ export default function AirdropLeadsPage() {
       });
 
       if (value && user.referrer_code) {
-        const { data: referrer } = await supabase.from('airdrop_leads').select('*').eq('user_code', user.referrer_code).single();
+        const { data: referrer } = await supabase
+          .from('airdrop_leads')
+          .select('*')
+          .eq('user_code', user.referrer_code)
+          .single();
+
         if (referrer) {
           await supabase.from('token_transactions').insert({
             email: referrer.email,
@@ -117,7 +146,7 @@ export default function AirdropLeadsPage() {
   return (
     <>
       <Header />
-        <div className="p-8 bg-black min-h-screen text-white">
+      <div className="p-8 bg-black min-h-screen text-white">
         <h1 className="text-2xl font-bold mb-6">BitFtx Admin Panel – Airdrop Verification</h1>
 
         <div className="bg-[#1a1a1d] p-4 rounded-lg border border-white/10 mb-6">
@@ -142,6 +171,7 @@ export default function AirdropLeadsPage() {
                 <th className="p-2 border">Referral Code</th>
                 <th className="p-2 border">Referred By</th>
                 <th className="p-2 border">Verified</th>
+                <th className="p-2 border">Token Balance</th>
                 <th className="p-2 border">Actions</th>
               </tr>
             </thead>
@@ -157,6 +187,7 @@ export default function AirdropLeadsPage() {
                   <td className="p-2 border">{lead.user_code || '—'}</td>
                   <td className="p-2 border">{lead.referrer_code || '—'}</td>
                   <td className="p-2 border">{lead.verified ? '✅' : '❌'}</td>
+                  <td className="p-2 border">{lead.token_balance}</td>
                   <td className="p-2 border space-y-1">
                     {['joined_twitter', 'joined_telegram', 'joined_discord', 'verified'].map((field) => (
                       <button key={field} onClick={() => updateStatus(lead.id, field, !lead[field])} className="bg-purple-600 hover:bg-purple-700 text-xs px-2 py-1 rounded mr-1">
