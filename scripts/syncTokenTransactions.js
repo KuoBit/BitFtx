@@ -11,7 +11,7 @@ function normalize(str) {
 }
 
 async function syncTokenTransactions() {
-  const { data: campaign, error: campaignError } = await supabase
+  const { data: campaign } = await supabase
     .from('airdrop_campaigns')
     .select('*')
     .eq('is_active', true)
@@ -19,27 +19,20 @@ async function syncTokenTransactions() {
     .limit(1)
     .single();
 
-  if (campaignError || !campaign) {
-    console.error("❌ No active campaign found.", campaignError?.message);
+  if (!campaign) {
+    console.error("❌ No active campaign found.");
     return;
   }
 
-  const { data: users, error: userError } = await supabase.from('airdrop_leads').select('*');
-  if (userError || !users) {
-    console.error("❌ Failed to fetch airdrop leads.", userError?.message);
-    return;
-  }
+  console.log("📦 Active Campaign:", campaign);
+
+  const { data: users } = await supabase.from('airdrop_leads').select('*');
 
   for (const user of users) {
-    const { data: txsData, error: txError } = await supabase
+    const { data: txsData } = await supabase
       .from('token_transactions')
       .select('description')
       .eq('email', user.email);
-
-    if (txError) {
-      console.error(`❌ Failed to fetch transactions for ${user.email}:`, txError.message);
-      continue;
-    }
 
     const has = (desc) =>
       txsData && txsData.some((t) => normalize(t.description) === normalize(desc));
@@ -47,18 +40,17 @@ async function syncTokenTransactions() {
     // ✅ 1. Sign-up Bonus
     if (!has('Sign-up Bonus')) {
       console.log(`🪙 Signup Bonus → ${user.email}`);
-      const { error } = await supabase.from('token_transactions').insert([{
+      await supabase.from('token_transactions').insert({
         email: user.email,
-        amount: campaign.signup_bonus,
+        amount: campaign.signup_tokens,
         type: 'earn',
         description: 'Sign-up Bonus',
-      }]);
-      if (error) console.error(`❌ Failed signup bonus for ${user.email}:`, error.message);
+      });
     }
 
     // ✅ 2. Referral Bonus for Signup
     if (user.referrer_code && !has(`Referral Bonus: ${user.email}`)) {
-      const { data: ref, error: refError } = await supabase
+      const { data: ref } = await supabase
         .from('airdrop_leads')
         .select('*')
         .eq('user_code', user.referrer_code)
@@ -66,15 +58,12 @@ async function syncTokenTransactions() {
 
       if (ref) {
         console.log(`🎁 Referral Signup Bonus → ${ref.email} (ref for ${user.email})`);
-        const { error } = await supabase.from('token_transactions').insert([{
+        await supabase.from('token_transactions').insert({
           email: ref.email,
-          amount: campaign.referrer_bonus,
+          amount: campaign.referral_tokens,
           type: 'earn',
           description: `Referral Bonus: ${user.email}`,
-        }]);
-        if (error) console.error(`❌ Failed referral bonus for ${ref.email}:`, error.message);
-      } else if (refError) {
-        console.error(`❌ Failed to fetch referrer for ${user.email}:`, refError.message);
+        });
       }
     }
 
@@ -87,17 +76,16 @@ async function syncTokenTransactions() {
 
       if (user[field] && !has(taskDesc)) {
         console.log(`✅ Task: ${taskDesc} → ${user.email}`);
-        const { error } = await supabase.from('token_transactions').insert([{
+        await supabase.from('token_transactions').insert({
           email: user.email,
           amount: campaign.task_tokens,
           type: 'earn',
           description: taskDesc,
-        }]);
-        if (error) console.error(`❌ Failed task bonus for ${user.email}:`, error.message);
+        });
 
         // ✅ 4. Referral Bonus for task
         if (user.referrer_code && !has(refDesc)) {
-          const { data: ref, error: refError } = await supabase
+          const { data: ref } = await supabase
             .from('airdrop_leads')
             .select('*')
             .eq('user_code', user.referrer_code)
@@ -105,15 +93,12 @@ async function syncTokenTransactions() {
 
           if (ref) {
             console.log(`🎯 Referral Task Bonus → ${ref.email} (ref for ${user.email})`);
-            const { error } = await supabase.from('token_transactions').insert([{
+            await supabase.from('token_transactions').insert({
               email: ref.email,
               amount: campaign.referee_bonus,
               type: 'earn',
               description: refDesc,
-            }]);
-            if (error) console.error(`❌ Failed referral task bonus for ${ref.email}:`, error.message);
-          } else if (refError) {
-            console.error(`❌ Failed to fetch referrer for task of ${user.email}:`, refError.message);
+            });
           }
         }
       }
