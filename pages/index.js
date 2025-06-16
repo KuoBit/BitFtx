@@ -69,32 +69,72 @@ export default function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.from("airdrop_leads").insert([
-      {
-        name: formData.name,
-        email: formData.email,
-        wallet: formData.wallet,
-        twitter: formData.twitter,
-        telegram: formData.telegram,
-        user_code,
-        referrer_code: referrerCode || null,
-      },
-    ]);
+  
+    const userData = {
+      name: formData.name,
+      email: formData.email,
+      wallet: formData.wallet,
+      twitter: formData.twitter,
+      telegram: formData.telegram,
+      user_code,
+      referrer_code: referrerCode || null,
+    };
+  
+    // 1. Insert into airdrop_leads
+    const { error } = await supabase.from("airdrop_leads").insert([userData]);
     if (error) {
       setMessage("❌ Error saving your submission.");
-    } else {
-          // ✅ Fire GA event
-          if (typeof window !== "undefined" && window.gtag) {
-            window.gtag("event", "airdrop_submit", {
-              event_category: "Airdrop",
-              event_label: ref || "organic",
-              value: 1,
-            });
-          }
-      setMessage("✅ You're in! Thanks for joining the airdrop.");
-      setFormData({ name: "", wallet: "", email: "", twitter: "", telegram: "" });
+      return;
     }
+  
+    // 2. Fetch active campaign
+    const { data: campaign } = await supabase
+      .from("airdrop_campaigns")
+      .select("*")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+  
+    // 3. Credit Sign-up Bonus
+    await supabase.from("token_transactions").insert({
+      email: userData.email,
+      amount: campaign.signup_bonus,
+      type: "earn",
+      description: "Sign-up Bonus",
+    });
+  
+    // 4. Credit Referral Bonus (if any)
+    if (userData.referrer_code) {
+      const { data: ref } = await supabase
+        .from("airdrop_leads")
+        .select("*")
+        .eq("user_code", userData.referrer_code)
+        .single();
+  
+      if (ref) {
+        await supabase.from("token_transactions").insert({
+          email: ref.email,
+          amount: campaign.referrer_bonus,
+          type: "earn",
+          description: `Referral Bonus: ${userData.email}`,
+        });
+      }
+    }
+  
+    // 5. Track GA and show confirmation
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "airdrop_submit", {
+        event_category: "Airdrop",
+        event_label: referrerCode || "organic",
+        value: 1,
+      });
+    }
+  
+    setMessage("✅ You're in! Thanks for joining the airdrop.");
+    setFormData({ name: "", wallet: "", email: "", twitter: "", telegram: "" });
   };
+  
   return (
     <div className="bg-[#0b0b0c] text-white min-h-screen font-sans">
             <Head>
