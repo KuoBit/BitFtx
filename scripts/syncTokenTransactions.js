@@ -6,6 +6,10 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk"
 );
 
+function normalize(str) {
+  return (str || '').trim().toLowerCase();
+}
+
 async function syncTokenTransactions() {
   const { data: campaign } = await supabase
     .from('airdrop_campaigns')
@@ -15,18 +19,25 @@ async function syncTokenTransactions() {
     .limit(1)
     .single();
 
+  if (!campaign) {
+    console.error("❌ No active campaign found.");
+    return;
+  }
+
   const { data: users } = await supabase.from('airdrop_leads').select('*');
 
   for (const user of users) {
-    const txs = await supabase
+    const { data: txsData } = await supabase
       .from('token_transactions')
-      .select('*')
+      .select('description')
       .eq('email', user.email);
 
-    const has = (desc) => txs.data.some((t) => t.description === desc);
+    const has = (desc) =>
+      txsData && txsData.some((t) => normalize(t.description) === normalize(desc));
 
-    // Sign-up bonus
+    // ✅ 1. Sign-up Bonus
     if (!has('Sign-up Bonus')) {
+      console.log(`🪙 Signup Bonus → ${user.email}`);
       await supabase.from('token_transactions').insert({
         email: user.email,
         amount: campaign.signup_bonus,
@@ -35,8 +46,8 @@ async function syncTokenTransactions() {
       });
     }
 
-    // Referrer reward for signup
-    if (user.referrer_code && !txs.data.some(t => t.description === `Referral Bonus: ${user.email}`)) {
+    // ✅ 2. Referral Bonus for Signup
+    if (user.referrer_code && !has(`Referral Bonus: ${user.email}`)) {
       const { data: ref } = await supabase
         .from('airdrop_leads')
         .select('*')
@@ -44,6 +55,7 @@ async function syncTokenTransactions() {
         .single();
 
       if (ref) {
+        console.log(`🎁 Referral Signup Bonus → ${ref.email} (ref for ${user.email})`);
         await supabase.from('token_transactions').insert({
           email: ref.email,
           amount: campaign.referrer_bonus,
@@ -53,20 +65,24 @@ async function syncTokenTransactions() {
       }
     }
 
-    // Task completion
+    // ✅ 3. Task Completion Bonuses (Twitter, Telegram, Discord)
     for (const task of ['twitter', 'telegram', 'discord']) {
       const field = `joined_${task}`;
       const label = task.charAt(0).toUpperCase() + task.slice(1);
-      if (user[field] && !has(`Completed ${label}`)) {
+      const taskDesc = `Completed ${label}`;
+      const refDesc = `Referee ${user.email} completed ${label}`;
+
+      if (user[field] && !has(taskDesc)) {
+        console.log(`✅ Task: ${taskDesc} → ${user.email}`);
         await supabase.from('token_transactions').insert({
           email: user.email,
           amount: campaign.task_tokens,
           type: 'earn',
-          description: `Completed ${label}`,
+          description: taskDesc,
         });
 
-        // Referrer reward for task
-        if (user.referrer_code && !txs.data.some(t => t.description === `Referee ${user.email} completed ${label}`)) {
+        // ✅ 4. Referral Bonus for task
+        if (user.referrer_code && !has(refDesc)) {
           const { data: ref } = await supabase
             .from('airdrop_leads')
             .select('*')
@@ -74,11 +90,12 @@ async function syncTokenTransactions() {
             .single();
 
           if (ref) {
+            console.log(`🎯 Referral Task Bonus → ${ref.email} (ref for ${user.email})`);
             await supabase.from('token_transactions').insert({
               email: ref.email,
               amount: campaign.referee_bonus,
               type: 'earn',
-              description: `Referee ${user.email} completed ${label}`,
+              description: refDesc,
             });
           }
         }
