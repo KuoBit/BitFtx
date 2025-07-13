@@ -74,28 +74,28 @@ export default function TrackingSummary() {
 
       <Card>
         <CardContent>
-          <Table>
-            <Thead>
-              <Tr>
-                <Th>Source</Th>
-                <Th>Country</Th>
-                <Th>Clicks</Th>
-                <Th>Page Views</Th>
-                <Th>Airdrop Submissions</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {filtered.map((row, idx) => (
-                <Tr key={idx}>
-                  <Td>{row.source}</Td>
-                  <Td>{row.country}</Td>
-                  <Td>{row.clicks}</Td>
-                  <Td>{row.page_views}</Td>
-                  <Td>{row.airdrop_submissions}</Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
+        <table className="w-full text-sm text-left">
+  <thead>
+    <tr>
+      <th>Source</th>
+      <th>Country</th>
+      <th>Clicks</th>
+      <th>Views</th>
+      <th>Airdrops</th>
+    </tr>
+  </thead>
+  <tbody>
+    {data.map((row, i) => (
+      <tr key={i}>
+        <td>{row.source}</td>
+        <td>{row.country}</td>
+        <td>{row.clicks}</td>
+        <td>{row.views}</td>
+        <td>{row.airdrops}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
         </CardContent>
       </Card>
     </div>
