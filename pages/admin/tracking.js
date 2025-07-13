@@ -35,13 +35,14 @@ export default function TrackingSummary() {
             source: e.source || "unknown",
             country: e.country || "unknown",
             clicks: 0,
-            page_views: 0,
-            airdrop_submissions: 0,
+            visits: 0,
+            airdrops: 0,
           };
         }
-        if (e.event === "visit") summaryMap[key].clicks++;
-        if (e.event === "page_view") summaryMap[key].page_views++;
-        if (e.event === "airdrop_submit") summaryMap[key].airdrop_submissions++;
+
+        if (e.event_type === "click") summaryMap[key].clicks++;
+        if (e.event_type === "visit") summaryMap[key].visits++;
+        if (e.event_type === "submit") summaryMap[key].airdrops++;
       });
 
       setSummary(Object.values(summaryMap));
@@ -78,11 +79,11 @@ export default function TrackingSummary() {
           <table className="w-full text-sm text-left">
             <thead>
               <tr>
-                <th>Source</th>
-                <th>Country</th>
-                <th>Clicks</th>
-                <th>Views</th>
-                <th>Airdrops</th>
+                <th className="text-left">Source</th>
+                <th className="text-left">Country</th>
+                <th className="text-left">Clicks</th>
+                <th className="text-left">Visits</th>
+                <th className="text-left">Airdrops</th>
               </tr>
             </thead>
             <tbody>
@@ -91,8 +92,8 @@ export default function TrackingSummary() {
                   <td>{row.source}</td>
                   <td>{row.country}</td>
                   <td>{row.clicks}</td>
-                  <td>{row.page_views}</td>
-                  <td>{row.airdrop_submissions}</td>
+                  <td>{row.visits}</td>
+                  <td>{row.airdrops}</td>
                 </tr>
               ))}
             </tbody>
