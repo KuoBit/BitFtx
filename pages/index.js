@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useRouter } from 'next/router';
-import { trackEvent } from "utils/trackEvent";
+import { trackEvent } from "./utils/trackEvent";
 
 const supabase = createClient(
   "https://onevirzsdrfxposewozx.supabase.co",
