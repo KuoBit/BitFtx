@@ -1,8 +1,8 @@
-// pages/admin/tracking.js
-
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import dynamic from "next/dynamic";
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const supabase = createClient(
   "https://onevirzsdrfxposewozx.supabase.co",
@@ -37,6 +37,8 @@ const TrackingDashboard = () => {
   const uniqueCountries = [...new Set(data.map((d) => d.country))];
 
   return (
+    <>
+      <Header />
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">📊 Tracking Dashboard</h1>
 
@@ -97,6 +99,8 @@ const TrackingDashboard = () => {
         </table>
       )}
     </div>
+          <Footer />
+        </>
   );
 };
 
