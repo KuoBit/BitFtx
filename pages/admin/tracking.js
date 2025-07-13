@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Table, Tbody, Td, Th, Thead, Tr } from "@/components/ui/table";
 
 const supabase = createClient(
   "https://onevirzsdrfxposewozx.supabase.co",
@@ -22,6 +21,8 @@ export default function TrackingSummary() {
         .from("tracking_events")
         .select("*")
         .order("created_at", { ascending: false });
+
+      if (!data) return;
 
       setEvents(data);
 
@@ -74,28 +75,28 @@ export default function TrackingSummary() {
 
       <Card>
         <CardContent>
-        <table className="w-full text-sm text-left">
-  <thead>
-    <tr>
-      <th>Source</th>
-      <th>Country</th>
-      <th>Clicks</th>
-      <th>Views</th>
-      <th>Airdrops</th>
-    </tr>
-  </thead>
-  <tbody>
-    {data.map((row, i) => (
-      <tr key={i}>
-        <td>{row.source}</td>
-        <td>{row.country}</td>
-        <td>{row.clicks}</td>
-        <td>{row.views}</td>
-        <td>{row.airdrops}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr>
+                <th>Source</th>
+                <th>Country</th>
+                <th>Clicks</th>
+                <th>Views</th>
+                <th>Airdrops</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((row, i) => (
+                <tr key={i}>
+                  <td>{row.source}</td>
+                  <td>{row.country}</td>
+                  <td>{row.clicks}</td>
+                  <td>{row.page_views}</td>
+                  <td>{row.airdrop_submissions}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </CardContent>
       </Card>
     </div>
