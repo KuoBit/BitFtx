@@ -7,7 +7,7 @@ import AirdropModal from "@/components/AirdropModal";
 import { createClient } from "@supabase/supabase-js";
 import Script from "next/script";
 import { useEffect } from "react";
-import { trackEvent } from "../utils/trackEvent";
+import { trackEvent } from "utils/trackEvent";
 
 
 const supabase = createClient(
