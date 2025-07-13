@@ -1,4 +1,3 @@
-// utils/trackEvent.js
 
 export const trackEvent = async (event_type) => {
     if (typeof window === "undefined") return;
@@ -14,7 +13,7 @@ export const trackEvent = async (event_type) => {
       const geo = await fetch('https://ipapi.co/json').then(res => res.json());
       const country = geo?.country_name || 'Unknown';
   
-      await fetch('../api/track', {
+      await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
