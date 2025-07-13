@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { trackEvent } from "@/utils/trackEvent";
 
 const generateUserCode = () => {
   const randomHash = Math.random().toString(36).substring(2, 10); // 8-char base36
@@ -58,6 +59,7 @@ const AirdropModal = ({ onSubmit }) => {
         twitter: "",
         telegram: "",
       });
+      trackEvent("submit");
       setTimeout(() => setVisible(false), 2000);
     }
   };

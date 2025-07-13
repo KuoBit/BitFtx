@@ -7,11 +7,25 @@ import AirdropModal from "@/components/AirdropModal";
 import { createClient } from "@supabase/supabase-js";
 import Script from "next/script";
 import { useEffect } from "react";
+import { trackEvent } from "@/utils/trackEvent";
+
 
 const supabase = createClient(
   "https://onevirzsdrfxposewozx.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk"
 );
+
+// 🚀 Tracking Setup
+const initTracking = () => {
+  if (typeof window === "undefined") return;
+
+  const params = new URLSearchParams(window.location.search);
+  const src = params.get("src");
+  const sessionId = localStorage.getItem("bftx_session_id") || crypto.randomUUID();
+
+  localStorage.setItem("bftx_session_id", sessionId);
+  if (src) localStorage.setItem("bftx_source", src);
+};
 
 export default function App({ Component, pageProps }) {
   // Google Analytics
@@ -24,6 +38,12 @@ export default function App({ Component, pageProps }) {
       gtag("js", new Date());
       gtag("config", "G-GZ4N5DCXE1");
     }
+  }, []);
+
+  // 🔁 Init custom tracking on first visit
+  useEffect(() => {
+    initTracking();
+    trackEvent("visit");
   }, []);
 
   // Supabase Magic Link Session Restore

@@ -132,6 +132,7 @@ export default function Home() {
     }
   
     setMessage("✅ You're in! Thanks for joining the airdrop.");
+    trackEvent("submit");
     setFormData({ name: "", wallet: "", email: "", twitter: "", telegram: "" });
   };
   
