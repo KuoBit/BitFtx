@@ -1,4 +1,3 @@
-// pages/admin/tracking.js
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,6 +13,10 @@ export default function TrackingSummary() {
   const [summary, setSummary] = useState([]);
   const [sourceFilter, setSourceFilter] = useState("");
   const [countryFilter, setCountryFilter] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [sortField, setSortField] = useState("clicks");
+  const [sortOrder, setSortOrder] = useState("desc");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,10 +29,11 @@ export default function TrackingSummary() {
 
       setEvents(data);
 
-      // Group and summarize
       const summaryMap = {};
       data.forEach((e) => {
+        const date = new Date(e.created_at);
         const key = `${e.source || "unknown"}|${e.country || "unknown"}`;
+
         if (!summaryMap[key]) {
           summaryMap[key] = {
             source: e.source || "unknown",
@@ -37,12 +41,17 @@ export default function TrackingSummary() {
             clicks: 0,
             visits: 0,
             airdrops: 0,
+            latest: date,
           };
         }
 
         if (e.event_type === "click") summaryMap[key].clicks++;
         if (e.event_type === "visit") summaryMap[key].visits++;
         if (e.event_type === "submit") summaryMap[key].airdrops++;
+
+        if (date > summaryMap[key].latest) {
+          summaryMap[key].latest = date;
+        }
       });
 
       setSummary(Object.values(summaryMap));
@@ -51,17 +60,63 @@ export default function TrackingSummary() {
     fetchData();
   }, []);
 
-  const filtered = summary.filter(
-    (row) =>
+  const filtered = summary
+    .filter((row) =>
       (!sourceFilter || row.source.includes(sourceFilter)) &&
-      (!countryFilter || row.country.includes(countryFilter))
-  );
+      (!countryFilter || row.country.includes(countryFilter)) &&
+      (!startDate || new Date(row.latest) >= new Date(startDate)) &&
+      (!endDate || new Date(row.latest) <= new Date(endDate))
+    )
+    .sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      if (typeof aVal === "string") {
+        return sortOrder === "asc"
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      } else {
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      }
+    });
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("desc");
+    }
+  };
+
+  const exportToCSV = () => {
+    const headers = ["Source", "Country", "Clicks", "Visits", "Airdrops"];
+    const rows = filtered.map((row) => [
+      row.source,
+      row.country,
+      row.clicks,
+      row.visits,
+      row.airdrops,
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((e) => e.join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "tracking_summary.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">📊 Tracking Summary</h1>
 
-      <div className="flex gap-4 mb-4">
+      <div className="flex flex-wrap gap-4 mb-4 items-center">
         <Input
           placeholder="Filter by Source"
           value={sourceFilter}
@@ -72,6 +127,24 @@ export default function TrackingSummary() {
           value={countryFilter}
           onChange={(e) => setCountryFilter(e.target.value)}
         />
+        <Input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="w-48"
+        />
+        <Input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="w-48"
+        />
+        <button
+          onClick={exportToCSV}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          ⬇ Download CSV
+        </button>
       </div>
 
       <Card>
@@ -79,11 +152,11 @@ export default function TrackingSummary() {
           <table className="w-full text-sm text-left">
             <thead>
               <tr>
-                <th className="text-left">Source</th>
-                <th className="text-left">Country</th>
-                <th className="text-left">Clicks</th>
-                <th className="text-left">Visits</th>
-                <th className="text-left">Airdrops</th>
+                <th className="cursor-pointer" onClick={() => handleSort("source")}>Source</th>
+                <th className="cursor-pointer" onClick={() => handleSort("country")}>Country</th>
+                <th className="cursor-pointer" onClick={() => handleSort("clicks")}>Clicks</th>
+                <th className="cursor-pointer" onClick={() => handleSort("visits")}>Visits</th>
+                <th className="cursor-pointer" onClick={() => handleSort("airdrops")}>Airdrops</th>
               </tr>
             </thead>
             <tbody>
