@@ -61,23 +61,33 @@ export default function TrackingSummary() {
   }, []);
 
   const filtered = summary
-    .filter((row) =>
+  .filter((row) => {
+    const rowDate = new Date(row.latest);
+
+    const afterStart =
+      !startDate || rowDate >= new Date(`${startDate}T00:00:00`);
+    const beforeEnd =
+      !endDate || rowDate <= new Date(`${endDate}T23:59:59`);
+
+    return (
       (!sourceFilter || row.source.includes(sourceFilter)) &&
       (!countryFilter || row.country.includes(countryFilter)) &&
-      (!startDate || new Date(row.latest) >= new Date(startDate)) &&
-      (!endDate || new Date(row.latest) <= new Date(endDate))
-    )
-    .sort((a, b) => {
-      const aVal = a[sortField];
-      const bVal = b[sortField];
-      if (typeof aVal === "string") {
-        return sortOrder === "asc"
-          ? aVal.localeCompare(bVal)
-          : bVal.localeCompare(aVal);
-      } else {
-        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
-      }
-    });
+      afterStart &&
+      beforeEnd
+    );
+  })
+  .sort((a, b) => {
+    const aVal = a[sortField];
+    const bVal = b[sortField];
+    if (typeof aVal === "string") {
+      return sortOrder === "asc"
+        ? aVal.localeCompare(bVal)
+        : bVal.localeCompare(aVal);
+    } else {
+      return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+    }
+  });
+
 
   const handleSort = (field) => {
     if (sortField === field) {
