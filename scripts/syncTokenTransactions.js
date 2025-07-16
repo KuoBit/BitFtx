@@ -84,24 +84,34 @@ async function syncTokenTransactions() {
         });
 
         // ✅ 4. Referral Bonus for task
-        if (user.referrer_code && !has(`Referral Bonus: ${user.email}`)) {
+        if (user.referrer_code) {
           const { data: ref } = await supabase
             .from('airdrop_leads')
             .select('*')
             .eq('user_code', user.referrer_code)
             .single();
         
+          const referralDesc = `Referral Bonus: ${user.email}`;
+        
           if (ref) {
-            console.log(`🎁 Referral Signup Bonus → ${ref.email} (ref for ${user.email})`);
-            await supabase.from('token_transactions').insert({
-              email: ref.email,
-              amount: campaign.referral_tokens,
-              type: 'earn',
-              description: `Referral Bonus: ${user.email}`,
-            });
+            const { data: existingReferralTx } = await supabase
+              .from('token_transactions')
+              .select('*')
+              .eq('email', ref.email)
+              .eq('description', referralDesc)
+              .maybeSingle();
+        
+            if (!existingReferralTx) {
+              console.log(`🎁 Referral Signup Bonus → ${ref.email} (ref for ${user.email})`);
+              await supabase.from('token_transactions').insert({
+                email: ref.email,
+                amount: campaign.referral_tokens,
+                type: 'earn',
+                description: referralDesc,
+              });
+            }
           }
-        }        
-      }
+        }
     }
   }
 
