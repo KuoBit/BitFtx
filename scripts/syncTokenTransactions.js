@@ -51,13 +51,12 @@ async function syncTokenTransactions() {
     // ✅ 2. Referral Bonus for Signup (only once)
     if (user.referrer_code) {
       const refDesc = `Referral Bonus: ${user.email}`;
-      const { data: exists } = await supabase
-        .from('token_transactions')
-        .select('id')
-        .eq('description', refDesc)
-        .maybeSingle();
+      const { data: existingRefBonus, error } = await supabase
+  .from('token_transactions')
+  .select('id')
+  .eq('description', refDesc);
 
-      if (!exists) {
+if (!existingRefBonus || existingRefBonus.length === 0) {
         const { data: ref } = await supabase
           .from('airdrop_leads')
           .select('*')
