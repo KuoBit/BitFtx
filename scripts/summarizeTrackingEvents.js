@@ -4,7 +4,7 @@ const supabase = createClient(
     "https://onevirzsdrfxposewozx.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk"
   );
-  
+
 function formatDateUTC(date) {
   return date.toISOString().split("T")[0]; // YYYY-MM-DD
 }
@@ -15,10 +15,11 @@ async function summarizeTrackingEvents() {
 
   console.log("📦 Fetching events before:", today.toISOString());
 
-  const { data: events, error } = await supabase
-    .from("tracking_events")
-    .select("*")
-    .lt("created_at", today.toISOString());
+const { data: events, error } = await supabase
+  .from("tracking_events")
+  .select("*")
+  .lt("created_at", today.toISOString())
+  .range(0, 9999); // Fetch first 10,000 rows
 
   if (error) {
     console.error("❌ Error fetching tracking events:", error);
