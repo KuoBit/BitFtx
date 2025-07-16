@@ -6,7 +6,7 @@ const supabase = createClient(
   );
 
 function formatDateUTC(date) {
-  return date.toISOString().split("T")[0]; // YYYY-MM-DD
+  return date.toISOString().split("T")[0];
 }
 
 async function fetchAllOldEvents(todayISO) {
@@ -30,10 +30,9 @@ async function fetchAllOldEvents(todayISO) {
     if (!events || events.length === 0) break;
 
     allEvents.push(...events);
-
     console.log(`📄 Fetched ${events.length} rows [${from}-${to}]`);
 
-    if (events.length < pageSize) break; // reached end
+    if (events.length < pageSize) break;
 
     from += pageSize;
     to += pageSize;
@@ -44,7 +43,7 @@ async function fetchAllOldEvents(todayISO) {
 
 async function summarizeTrackingEvents() {
   const today = new Date();
-  today.setUTCHours(0, 0, 0, 0); // Start of today in UTC
+  today.setUTCHours(0, 0, 0, 0);
   const todayISO = today.toISOString();
 
   console.log("📦 Fetching events before:", todayISO);
@@ -61,8 +60,7 @@ async function summarizeTrackingEvents() {
 
   for (const e of events) {
     const date = new Date(e.created_at);
-    date.setUTCHours(0, 0, 0, 0); // Normalize to date only
-
+    date.setUTCHours(0, 0, 0, 0);
     const key = `${e.source || "unknown"}|${e.country || "unknown"}|${formatDateUTC(date)}`;
 
     if (!summaryMap[key]) {
@@ -131,7 +129,20 @@ async function summarizeTrackingEvents() {
     }
   }
 
-  console.log("✅ Summarization completed (no deletions done).");
+  // ✅ DELETE events that were summarized
+  console.log("🧹 Deleting old events from tracking_events...");
+  const { error: deleteError } = await supabase
+    .from("tracking_events")
+    .delete()
+    .lt("created_at", todayISO);
+
+  if (deleteError) {
+    console.error("❌ Error deleting old tracking events:", deleteError);
+  } else {
+    console.log("🗑️ Old tracking events deleted.");
+  }
+
+  console.log("✅ Summarization + Cleanup completed.");
 }
 
 summarizeTrackingEvents();
