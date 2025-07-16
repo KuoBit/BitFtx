@@ -84,34 +84,34 @@ async function syncTokenTransactions() {
         });
 
         // ✅ 4. Referral Bonus for task
-        if (user.referrer_code) {
-          const { data: ref } = await supabase
-            .from('airdrop_leads')
-            .select('*')
-            .eq('user_code', user.referrer_code)
-            .single();
-        
-          const referralDesc = `Referral Bonus: ${user.email}`;
-        
-          if (ref) {
-            const { data: existingReferralTx } = await supabase
-              .from('token_transactions')
-              .select('*')
-              .eq('email', ref.email)
-              .eq('description', referralDesc)
-              .maybeSingle();
-        
-            if (!existingReferralTx) {
-              console.log(`🎁 Referral Signup Bonus → ${ref.email} (ref for ${user.email})`);
-              await supabase.from('token_transactions').insert({
-                email: ref.email,
-                amount: campaign.referral_tokens,
-                type: 'earn',
-                description: referralDesc,
-              });
-            }
-          }
-        }
+if (user.referrer_code) {
+  const referralDesc = `Referral Bonus: ${user.email}`;
+
+  const { data: existingReferralBonus } = await supabase
+    .from('token_transactions')
+    .select('id')
+    .eq('description', referralDesc)
+    .maybeSingle();
+
+  if (!existingReferralBonus) {
+    const { data: ref } = await supabase
+      .from('airdrop_leads')
+      .select('*')
+      .eq('user_code', user.referrer_code)
+      .single();
+
+    if (ref) {
+      console.log(`🎁 Referral Signup Bonus → ${ref.email} (ref for ${user.email})`);
+      await supabase.from('token_transactions').insert({
+        email: ref.email,
+        amount: campaign.referral_tokens,
+        type: 'earn',
+        description: referralDesc,
+      });
+    }
+  }
+}
+
       }
     }
   }
