@@ -9,7 +9,6 @@ const supabase = createClient(
 );
 
 export default function TrackingSummary() {
-  const [events, setEvents] = useState([]);
   const [summary, setSummary] = useState([]);
   const [sourceFilter, setSourceFilter] = useState("");
   const [countryFilter, setCountryFilter] = useState("");
@@ -19,75 +18,152 @@ export default function TrackingSummary() {
   const [sortOrder, setSortOrder] = useState("desc");
 
   useEffect(() => {
+    const fetchAllPaginated = async (table, filter = {}) => {
+      const pageSize = 1000;
+      let all = [];
+      let from = 0;
+      let to = pageSize - 1;
+
+      while (true) {
+        const query = supabase.from(table).select("*").range(from, to);
+
+        if (filter?.ltCreatedAt) {
+          query.lt("created_at", filter.ltCreatedAt);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+          console.error(`❌ Error fetching from ${table}:`, error);
+          break;
+        }
+
+        if (!data || data.length === 0) break;
+
+        all.push(...data);
+
+        if (data.length < pageSize) break;
+
+        from += pageSize;
+        to += pageSize;
+      }
+
+      return all;
+    };
+
     const fetchData = async () => {
-      const { data } = await supabase
-        .from("tracking_events")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const today = new Date();
+      today.setUTCHours(0, 0, 0, 0);
+      const todayISO = today.toISOString();
 
-      if (!data) return;
+      // 🔹 Fetch summarized history
+      const summarized = await fetchAllPaginated("tracking_summary");
 
-      setEvents(data);
+      // 🔹 Fetch today's unsummarized raw events
+      const events = await fetchAllPaginated("tracking_events", {
+        ltCreatedAt: null, // we want today's and later
+      });
 
-      const summaryMap = {};
-      data.forEach((e) => {
-        const date = new Date(e.created_at);
+      const todayOnlyEvents = events.filter(
+        (e) => new Date(e.created_at) >= new Date(todayISO)
+      );
+
+      const todayMap = {};
+      todayOnlyEvents.forEach((e) => {
         const key = `${e.source || "unknown"}|${e.country || "unknown"}`;
-
-        if (!summaryMap[key]) {
-          summaryMap[key] = {
+        if (!todayMap[key]) {
+          todayMap[key] = {
             source: e.source || "unknown",
             country: e.country || "unknown",
             clicks: 0,
             visits: 0,
             airdrops: 0,
-            latest: date,
+            latest: new Date(e.created_at),
           };
         }
 
-        if (e.event_type === "click") summaryMap[key].clicks++;
-        if (e.event_type === "visit") summaryMap[key].visits++;
-        if (e.event_type === "submit") summaryMap[key].airdrops++;
+        if (e.event_type === "click") todayMap[key].clicks++;
+        if (e.event_type === "visit") todayMap[key].visits++;
+        if (e.event_type === "submit") todayMap[key].airdrops++;
 
-        if (date > summaryMap[key].latest) {
-          summaryMap[key].latest = date;
+        if (new Date(e.created_at) > todayMap[key].latest) {
+          todayMap[key].latest = new Date(e.created_at);
         }
       });
 
-      setSummary(Object.values(summaryMap));
+      const finalMap = {};
+
+      // Add summarized data
+      for (const row of summarized) {
+        const key = `${row.source}|${row.country}`;
+        if (!finalMap[key]) {
+          finalMap[key] = {
+            source: row.source,
+            country: row.country,
+            clicks: 0,
+            visits: 0,
+            airdrops: 0,
+            latest: new Date(row.event_date),
+          };
+        }
+
+        finalMap[key].clicks += row.clicks;
+        finalMap[key].visits += row.visits;
+        finalMap[key].airdrops += row.airdrops;
+
+        if (new Date(row.event_date) > finalMap[key].latest) {
+          finalMap[key].latest = new Date(row.event_date);
+        }
+      }
+
+      // Merge in today's data
+      for (const key in todayMap) {
+        if (!finalMap[key]) {
+          finalMap[key] = todayMap[key];
+        } else {
+          finalMap[key].clicks += todayMap[key].clicks;
+          finalMap[key].visits += todayMap[key].visits;
+          finalMap[key].airdrops += todayMap[key].airdrops;
+
+          if (todayMap[key].latest > finalMap[key].latest) {
+            finalMap[key].latest = todayMap[key].latest;
+          }
+        }
+      }
+
+      setSummary(Object.values(finalMap));
     };
 
     fetchData();
   }, []);
 
   const filtered = summary
-  .filter((row) => {
-    const rowDate = new Date(row.latest);
+    .filter((row) => {
+      const rowDate = new Date(row.latest);
 
-    const afterStart =
-      !startDate || rowDate >= new Date(`${startDate}T00:00:00`);
-    const beforeEnd =
-      !endDate || rowDate <= new Date(`${endDate}T23:59:59`);
+      const afterStart =
+        !startDate || rowDate >= new Date(`${startDate}T00:00:00`);
+      const beforeEnd =
+        !endDate || rowDate <= new Date(`${endDate}T23:59:59`);
 
-    return (
-      (!sourceFilter || row.source.includes(sourceFilter)) &&
-      (!countryFilter || row.country.includes(countryFilter)) &&
-      afterStart &&
-      beforeEnd
-    );
-  })
-  .sort((a, b) => {
-    const aVal = a[sortField];
-    const bVal = b[sortField];
-    if (typeof aVal === "string") {
-      return sortOrder === "asc"
-        ? aVal.localeCompare(bVal)
-        : bVal.localeCompare(aVal);
-    } else {
-      return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
-    }
-  });
-
+      return (
+        (!sourceFilter || row.source.includes(sourceFilter)) &&
+        (!countryFilter || row.country.includes(countryFilter)) &&
+        afterStart &&
+        beforeEnd
+      );
+    })
+    .sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      if (typeof aVal === "string") {
+        return sortOrder === "asc"
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      } else {
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      }
+    });
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -108,13 +184,10 @@ export default function TrackingSummary() {
       row.airdrops,
     ]);
 
-    const csvContent = [headers, ...rows]
-      .map((e) => e.join(","))
-      .join("\n");
+    const csvContent = [headers, ...rows].map((e) => e.join(",")).join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
-
     const a = document.createElement("a");
     a.href = url;
     a.download = "tracking_summary.csv";
