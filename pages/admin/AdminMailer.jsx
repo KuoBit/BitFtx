@@ -3,6 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Select from "react-select";
+
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
@@ -104,18 +106,13 @@ export default function AdminMailer() {
       </div>
 
       <h3 className="text-lg font-semibold mb-2">Recipients:</h3>
-      <div className="max-h-64 overflow-y-auto border rounded p-3">
-        {users.map((u, i) => (
-          <label key={i} className="block">
-            <input
-              type="checkbox"
-              checked={selectedEmails.includes(u.email)}
-              onChange={() => toggleEmail(u.email)}
-            />{" "}
-            {u.email}
-          </label>
-        ))}
-      </div>
+<Select
+  isMulti
+  options={users.map((u) => ({ value: u.email, label: u.email }))}
+  onChange={(selected) => setSelectedEmails(selected.map((s) => s.value))}
+  placeholder="Select emails..."
+  className="mb-4"
+/>
 
       <Button className="mt-4" onClick={sendEmails}>
         🚀 Send Email
