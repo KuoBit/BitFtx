@@ -35,51 +35,55 @@ export default function AdminMailer() {
     fetchUsers();
   }, []);
 
-  const sendEmails = async () => {
-    if (!subject || !html || selectedEmails.length === 0) {
-      alert("Please fill in all fields and select recipients.");
-      return;
-    }
+const sendEmails = async () => {
+  if (!subject || !html || selectedEmails.length === 0) {
+    alert("Please fill in all fields and select recipients.");
+    return;
+  }
 
-    setLoading(true);
+  // ✅ Remove duplicates
+  const uniqueEmails = [...new Set(selectedEmails)];
 
-    try {
-      const res = await fetch(
-        "https://onevirzsdrfxposewozx.supabase.co/functions/v1/send-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+  setLoading(true);
+
+  try {
+    const res = await fetch(
+      "https://onevirzsdrfxposewozx.supabase.co/functions/v1/send-email",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
             Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk`, // Or hardcode your anon key if safe
-          },
-          body: JSON.stringify({
-            to: selectedEmails,
-            subject: subject.trim(),
-            html,
-          }),
-        }
-      );
-
-      const result = await res.json();
-
-      if (res.ok) {
-        alert("✅ Emails sent successfully!");
-        await supabase.from("sent_emails").insert({
-          subject,
+        },
+        body: JSON.stringify({
+          to: uniqueEmails, // ✅ Use unique emails here
+          subject: subject.trim(),
           html,
-          recipients: selectedEmails,
-        });
-      } else {
-        console.error(result.error || "Unknown error");
-        alert("❌ Failed to send emails: " + (result.error || "Check console"));
+        }),
       }
-    } catch (err) {
-      console.error("❌ Error sending emails:", err);
-      alert("❌ Something went wrong. Check console.");
-    } finally {
-      setLoading(false);
+    );
+
+    const result = await res.json();
+
+    if (res.ok) {
+      alert("✅ Emails sent successfully!");
+      await supabase.from("sent_emails").insert({
+        subject,
+        html,
+        recipients: uniqueEmails,
+      });
+    } else {
+      console.error(result.error || "Unknown error");
+      alert("❌ Failed to send emails: " + (result.error || "Check console"));
     }
-  };
+  } catch (err) {
+    console.error("❌ Error sending emails:", err);
+    alert("❌ Something went wrong. Check console.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const sendTestEmail = async () => {
     const testEmail = prompt("Enter a test email address:");
@@ -92,7 +96,7 @@ export default function AdminMailer() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer YOUR_SUPABASE_ANON_KEY`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk`, // Or hardcode your anon key if safe
           },
           body: JSON.stringify({
             to: [testEmail],
