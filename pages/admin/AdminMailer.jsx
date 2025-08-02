@@ -26,7 +26,7 @@ export default function AdminMailer() {
   useEffect(() => {
     const fetchUsers = async () => {
       const { data } = await supabase
-        .from("airdrop_leads")
+        .from("email_queue")
         .select("email")
         .order("created_at", { ascending: false });
 
