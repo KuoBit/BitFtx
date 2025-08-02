@@ -14,9 +14,6 @@ const supabase = createClient(
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZXZpcnpzZHJmeHBvc2V3b3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MDIzNjksImV4cCI6MjA2MDM3ODM2OX0.IPFY8wqbxadZugoGIRWsGNU27tVqS8BEYJkem8WubAk"
   );
 
-const SENDGRID_API = "https://api.sendgrid.com/v3/mail/send";
-const SENDGRID_KEY = "N3Q31HWTGZYHYGZUQAJC2UKS";
-
 export default function AdminMailer() {
   const [users, setUsers] = useState([]);
   const [selectedEmails, setSelectedEmails] = useState([]);
@@ -48,46 +45,42 @@ export default function AdminMailer() {
       alert("Please fill in all fields and select recipients.");
       return;
     }
-
-    const payload = {
-      personalizations: [
+  
+    try {
+      const res = await fetch(
+        "https://onevirzsdrfxposewozx.supabase.co/functions/v1/send-email",
         {
-          to: selectedEmails.map((email) => ({ email })),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            subject,
+            html,
+            recipients: selectedEmails,
+          }),
+        }
+      );
+  
+      const result = await res.json();
+  
+      if (res.ok) {
+        alert("✅ Emails sent successfully!");
+        await supabase.from("sent_emails").insert({
           subject,
-        },
-      ],
-      from: {
-        email: "no-reply@bitftx.com",
-        name: "BitFtx",
-      },
-      content: [
-        {
-          type: "text/html",
-          value: html,
-        },
-      ],
-    };
-
-    const res = await fetch("https://onevirzsdrfxposewozx.supabase.co/functions/v1/send-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subject, html, recipients: selectedEmails }),
-    });
-    
-
-    if (res.ok) {
-      alert("✅ Emails sent!");
-      // Optionally log to Supabase
-      await supabase.from("sent_emails").insert({
-        subject,
-        html,
-        recipients: selectedEmails,
-      });
-    } else {
-      alert("❌ Failed to send emails.");
+          html,
+          recipients: selectedEmails,
+        });
+      } else {
+        console.error(result.error || "Unknown error");
+        alert("❌ Failed to send emails: " + (result.error || "Check console"));
+      }
+    } catch (err) {
+      console.error("❌ Error sending emails:", err);
+      alert("❌ Something went wrong. Check console.");
     }
   };
-
+  
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">📧 Admin Email Sender</h2>
