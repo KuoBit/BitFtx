@@ -68,14 +68,12 @@ export default function AdminMailer() {
       ],
     };
 
-    const res = await fetch(SENDGRID_API, {
+    const res = await fetch("https://onevirzsdrfxposewozx.supabase.co/functions/v1/send-email", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${SENDGRID_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subject, html, recipients: selectedEmails }),
     });
+    
 
     if (res.ok) {
       alert("✅ Emails sent!");
